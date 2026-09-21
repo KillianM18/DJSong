@@ -1,0 +1,19 @@
+$white: #FFFFFB;
+$black: #313742 ;
+$gray: #5A6A7C;
+$blue: #A2EBF0;
+$rose: #DB3069;
+
+a, button{
+                text-decoration: none;
+                color: $white;
+                font-size: 20px;
+                padding: 10px 20px;
+                border: 1px solid $white;
+                border-radius: 20px;
+                transition: all 0.3s ease-in-out;
+                &:hover{
+                    background-color: $rose;
+                    color: $white;
+                }
+            };
