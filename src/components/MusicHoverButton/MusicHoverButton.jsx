@@ -1,4 +1,5 @@
 import { useCallback, useRef } from "react";
+import { Link } from "react-router-dom";
 import "./MusicHoverButton.scss";
 
 const GLYPHS = ["\u266A", "\u266B", "\u266C", "\u2669"];
@@ -10,6 +11,8 @@ export default function MusicHoverButton({
   type = "button",
   disabled = false,
   className = "",
+  to, // si fourni, le composant se rend en <Link to="..."> (navigation)
+  href, // si fourni (et pas de `to`), se rend en <a href="...">
 }) {
   const fieldRef = useRef(null);
   const timerRef = useRef(null);
@@ -51,21 +54,49 @@ export default function MusicHoverButton({
     }
   }, []);
 
-  return (
-    <div className="music-btn-stage">
-      <div className="note-field" ref={fieldRef} />
+  const hoverHandlers = {
+    onMouseEnter: startSpawning,
+    onMouseLeave: stopSpawning,
+    onFocus: startSpawning,
+    onBlur: stopSpawning,
+  };
+
+  const combinedClassName = `music-hover-btn ${className} button`.trim();
+
+  let content;
+  if (to) {
+    // Bouton de navigation interne (react-router)
+    content = (
+      <Link to={to} className={combinedClassName} {...hoverHandlers} onClick={onClick}>
+        <span>{label}</span>
+      </Link>
+    );
+  } else if (href) {
+    // Lien externe classique
+    content = (
+      <a href={href} className={combinedClassName} {...hoverHandlers} onClick={onClick}>
+        <span>{label}</span>
+      </a>
+    );
+  } else {
+    // Bouton natif (submit / button)
+    content = (
       <button
         type={type}
         disabled={disabled}
-        className={`music-hover-btn ${className} button`.trim()}
-        onMouseEnter={startSpawning}
-        onMouseLeave={stopSpawning}
-        onFocus={startSpawning}
-        onBlur={stopSpawning}
+        className={combinedClassName}
+        {...hoverHandlers}
         onClick={onClick}
       >
         <span>{label}</span>
       </button>
+    );
+  }
+
+  return (
+    <div className="music-btn-stage">
+      <div className="note-field" ref={fieldRef} />
+      {content}
     </div>
   );
 }

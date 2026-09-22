@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import './Home_connexion.scss'
 import '../../components/Button/button.scss';
+import MusicHoverButton from '../../components/MusicHoverButton/MusicHoverButton';
 
 function Home_connexion() {
 
@@ -15,8 +16,8 @@ function Home_connexion() {
         <div className="right">
             <h1>Bienvenue sur DJSong</h1>
             <div className="button-container">
-                <Link to="/connexion" className="button">Connexion</Link>
-                <Link to="/playboard" className="button">Invite</Link>
+                <MusicHoverButton to="/connexion" label="Connexion" />
+                <MusicHoverButton to="/playboard" label="Invite" />
             </div>
         </div>
         
