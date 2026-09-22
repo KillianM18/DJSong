@@ -1,0 +1,39 @@
+// FFFFFB blanc
+// 313742 bleu foncé
+// 5A6A7C bleu gris
+// A2EBF0 bleu clair
+// DB3069 rose
+.main {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #313742;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  &__userChoice {
+    width: 50%;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: space-around;
+    color: #fffffb;
+    &__btn {
+      box-sizing: border-box;
+      width: 1.5rem;
+      aspect-ratio: 1/1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background-color: #a2ebf0;
+      color: #313742;
+      font-size: larger;
+      border: none;
+      border-radius: 0.2rem;
+    }
+  }
+}
