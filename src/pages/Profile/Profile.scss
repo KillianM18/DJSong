@@ -2,11 +2,14 @@
     background-color:  #313742;
     margin:5vw;
 
-    &__title,&__informations{
+&__profileLogo{
+    width: 10vw;
+    color: #A2EBF0;
+}
+
+    &__title{
         color:#FFFFFB
     }
-
-
 
     &__lastMusicsTitle{
         color: #A2EBF0;

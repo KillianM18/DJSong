@@ -1,4 +1,5 @@
 import MusicCard from "../../components/MusicCard/MusicCard";
+import ProfileLogo from "../../assets/images/user.svg";
 import "./Profile.scss";
 
 function Profile() {
@@ -10,13 +11,12 @@ function Profile() {
 
   return (
     <div className="profile">
-      <h1 className="profile__title">Profil</h1>
-      <h2 className="profile__informations">
+      <img src={ProfileLogo} alt="profil" className="profile__profileLogo" />
+      <h1 className="profile__title">
         {data.firstname} {data.lastname}
-      </h2>
+      </h1>
       <hr />
-      <h3 className="profile__lastMusicsTitle">Derniers morceaux créés</h3>
-
+      <h2 className="profile__lastMusicsTitle">Derniers morceaux créés</h2>
       <div className="profile__musicsGrid">
         {data.createdMusics.map((music) => {
           return <MusicCard key={music} name={music} />;
