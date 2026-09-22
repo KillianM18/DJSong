@@ -1,0 +1,73 @@
+$white: #FFFFFB;
+$black: #313742 ;
+$gray: #5A6A7C;
+$blue: #A2EBF0;
+$rose: #DB3069;
+
+
+.Inscription {
+    background-color: $black;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    .left{
+        width: 40%;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-right: 1px solid $gray;
+    }
+    .right{
+        width: 60%;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+
+        h1{
+            color: $blue;
+            font-size: 50px;
+            margin-bottom: 50px;
+        }
+        .form-container{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            form{
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 10px;
+
+                input{
+                    width: 300px;
+                    height: 40px;
+                    border-radius: 20px;
+                    border: 1px solid $gray;
+                    padding: 0 20px;
+                    background-color: $black;
+                    color: $white;
+                    font-size: 16px;
+                    &::placeholder{
+                        color: $gray;
+                    }
+                }
+
+               button{
+                margin-top: 20px;
+               }
+            }
+           
+        }
+        
+    }
+}
