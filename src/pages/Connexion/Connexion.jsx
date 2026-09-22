@@ -20,7 +20,7 @@ function Connexion() {
         <div className="Connexion">
             <div className="left">
                 <div className="logo">
-                    <img src="https://cdn.discordapp.com/attachments/1129050911681876042/1130591558829824060/logo.png" alt="Logo" />
+                    <img src="src/assets/images/logo.webp" alt="Logo" />
                 </div>
             </div>
             <div className="right">
