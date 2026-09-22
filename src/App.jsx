@@ -1,4 +1,3 @@
-export default App;
 import { useState } from 'react';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Connexion from './pages/Connexion/Connexion.jsx';
