@@ -61,6 +61,9 @@ $rose: #DB3069;
                         color: $gray;
                     }
                 }
+                button{
+                    margin-top: 20px;
+                }
             }
            
         }
@@ -72,14 +75,14 @@ $rose: #DB3069;
             gap: 20px;
             p{
                 .link{
+                    
                     text-decoration: none;
                     color: $white;
                     font-size: 20px;
                     padding: 10px 20px;
                     border: 0px solid $white;
                     &:hover{
-                        background-color: $rose;
-                        color: $white;
+                        color: $rose;
                     }
                 }
             }

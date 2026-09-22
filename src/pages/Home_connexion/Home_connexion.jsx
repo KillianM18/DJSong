@@ -15,8 +15,8 @@ function Home_connexion() {
         <div className="right">
             <h1>Bienvenue sur DJSong</h1>
             <div className="button-container">
-                <Link to="/connexion">Connexion</Link>
-                <Link to="/playboard">Invite</Link>
+                <Link to="/connexion" className="button">Connexion</Link>
+                <Link to="/playboard" className="button">Invite</Link>
             </div>
         </div>
         

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import './Connexion.scss';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import MusicHoverButton from '../../components/MusicHoverButton/MusicHoverButton';
 
 function Connexion() {
     const [email, setEmail] = useState('');
@@ -25,12 +26,13 @@ function Connexion() {
         <div className="right">
             <h1>Connexion</h1>
             <div className="form-container">
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} method="POST">
                     <label htmlFor="email">Email ou nom d'utilisateur:</label>
                     <input type="email" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
                     <label htmlFor="password">Mot de passe:</label>
                     <input type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-                    <button type="submit">Se connecter</button>
+                    <MusicHoverButton type="submit" label="Se connecter" />
+                    
                 </form>
             </div>
             <div className="signup-link">
