@@ -1,15 +1,47 @@
+export default App;
+import { useState } from 'react';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import "./App.css";
+import Connexion from './pages/Connexion/Connexion.jsx';
+import Home_connexion from './pages/Home_connexion/Home_connexion.jsx';
+import Inscription from './pages/Inscription/Inscription.jsx';
 import Profile from "./pages/Profile/Profile";
+import "./App.css";
+
 
 function App() {
+
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/profile" element={<Profile />} />
-      </Routes>
-    </BrowserRouter>
-  );
+    <div className="app">
+      <BrowserRouter>
+        <Routes>
+          {/* Redirection automatique vers /connexion quand on arrive sur le site */}
+          <Route path="/" element={<Navigate to="/connexion" replace />} />
+          
+          <Route
+            path="/connexion"
+            element={
+              <Connexion />
+            }
+          />
+
+          <Route
+            path="/home_connexion"
+            element={
+              <Home_connexion />
+            }
+          />
+          <Route
+            path="/inscription"
+            element={
+              <Inscription />
+            }
+          />
+
+          <Route path="/profile" element={<Profile />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
+  )
 }
 
-export default App;
+export default App
