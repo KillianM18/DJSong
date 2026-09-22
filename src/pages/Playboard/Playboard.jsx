@@ -1,5 +1,5 @@
 import "./Playboard.scss";
-import Board from "../../components/Board";
+import Board from "../../components/Board/Board";
 import { Link } from "react-router-dom";
 
 import { useState } from "react";
@@ -30,6 +30,7 @@ function Playboard() {
 
   return (
     <div className="main">
+      
       <div className="main__userChoice">
         <span>Lignes :</span>
         <button
