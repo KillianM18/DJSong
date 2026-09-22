@@ -1,0 +1,37 @@
+// FFFFFB blanc
+// 313742 bleu foncé
+// 5A6A7C bleu gris
+// A2EBF0 bleu clair
+// DB3069 rose
+.playboard {
+  height: auto;
+  width: auto;
+  background: #fffffb;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1rem;
+  border-radius: 1rem;
+  border: 0.4rem solid #a2ebf0;
+  &__line {
+    width: auto;
+    height: auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    // background-color: blue;
+    &__btn-container-play {
+      margin: 1.5rem;
+      height: 10vh;
+      width: 10vh;
+
+      border-radius: 0.2rem;
+      border: none;
+
+      background: #5a6a7c;
+      &:hover {
+        background-color: #db3069;
+      }
+    }
+  }
+}

@@ -1,0 +1,69 @@
+import "./Playboard.scss";
+import Board from "../../components/Board";
+import { Link } from "react-router-dom";
+
+import { useState } from "react";
+function Playboard() {
+  const [nbr_line, setLine] = useState(3);
+  const [nbr_col, setCol] = useState(3);
+  // Limit the button's number on the playboard
+  if (nbr_line > 6 || nbr_col > 6) {
+    if (nbr_line > 6) {
+      setLine(6);
+    }
+    if (nbr_col > 6) {
+      setCol(6);
+    }
+    return alert("Vous êtes limités à 6 par lignes et colonnes.");
+  }
+  if (nbr_line < 1 || nbr_col < 1) {
+    if (nbr_line < 1) {
+      setLine(1);
+    }
+    if (nbr_col < 1) {
+      setCol(1);
+    }
+    return alert(
+      "Vous ne pouvez pas avoir moins d'une colonne ou d'une ligne.",
+    );
+  }
+
+  return (
+    <div className="main">
+      <div className="main__userChoice">
+        <span>Lignes :</span>
+        <button
+          onClick={() => setLine(nbr_line - 1)}
+          className="main__userChoice__btn"
+        >
+          -
+        </button>
+        <span>{nbr_line}</span>
+        <button
+          onClick={() => setLine(nbr_line + 1)}
+          className="main__userChoice__btn"
+        >
+          +
+        </button>
+
+        <span>Colonnes :</span>
+        <button
+          onClick={() => setCol(nbr_col - 1)}
+          className="main__userChoice__btn"
+        >
+          -
+        </button>
+        <span>{nbr_col}</span>
+        <button
+          onClick={() => setCol(nbr_col + 1)}
+          className="main__userChoice__btn"
+        >
+          +
+        </button>
+        <Link to="/playboard/parameters">Chercher un son</Link>
+      </div>
+      <Board nb_col={nbr_col} nb_line={nbr_line} />
+    </div>
+  );
+}
+export default Playboard;
