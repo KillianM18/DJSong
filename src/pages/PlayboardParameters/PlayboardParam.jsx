@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Search, Play, Pause, Plus, Music2, ArrowLeft, ChevronLeft, ChevronRight, Filter } from 'lucide-react';
-import '../../../style/pages/PlayboardParam.scss';
+import "./PlayboardParam.scss";
 
 const API_KEY = 'LvuTO0bluMYDQpYKGRPbqZidQKQUyaaFG0JTc5U1';
 const API_URL = 'https://freesound.org/apiv2/search/text/';

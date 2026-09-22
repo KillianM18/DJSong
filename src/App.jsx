@@ -5,7 +5,8 @@ import Home_connexion from './pages/Home_connexion/Home_connexion.jsx';
 import Inscription from './pages/Inscription/Inscription.jsx';
 import Profile from "./pages/Profile/Profile";
 import Playboard from "./pages/Playboard/Playboard";
-import "./App.css";
+import PlayboardParam from "./pages/PlayboardParameters/PlayboardParam.jsx";
+import "./App.scss";
 
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
 
           <Route path="/profile" element={<Profile />} />
           <Route path="/playboard" element={<Playboard />} />
+          <Route path="/playboard/parameters" element={<PlayboardParam />} />
         </Routes>
       </BrowserRouter>
     </div>
