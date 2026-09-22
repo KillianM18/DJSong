@@ -1,9 +1,11 @@
+export default App;
 import { useState } from 'react';
-import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Connexion from './pages/Connexion/Connexion.jsx';
 import Home_connexion from './pages/Home_connexion/Home_connexion.jsx';
 import Inscription from './pages/Inscription/Inscription.jsx';
-import './App.css';
+import Profile from "./pages/Profile/Profile";
+import "./App.css";
 
 
 function App() {
@@ -35,6 +37,7 @@ function App() {
             }
           />
 
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </BrowserRouter>
     </div>
