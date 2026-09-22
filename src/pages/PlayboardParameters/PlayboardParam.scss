@@ -1,10 +1,12 @@
+@use "../../style/abstract/variables" as *;
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
 
-$bg-color: #313742;
-$text-color: #FFFFFB;
-$hover-color: #A2EBF0;
-$secondary-color: #5A6A7C;
-$accent-color: #DB3069;
+$bg-color: $black;
+$text-color: $white;
+$hover-color: $blue;
+$secondary-color: $gray;
+$accent-color: $rose;
 
 
 

@@ -3,16 +3,19 @@
 // 5A6A7C bleu gris
 // A2EBF0 bleu clair
 // DB3069 rose
+
+@use "../style/abstract/variables" as *;
+
 .playboard {
   height: auto;
   width: auto;
-  background: #fffffb;
+  background: $white;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 1rem;
   border-radius: 1rem;
-  border: 0.4rem solid #a2ebf0;
+  border: 0.4rem solid $blue;
   &__line {
     width: auto;
     height: auto;
@@ -28,9 +31,9 @@
       border-radius: 0.2rem;
       border: none;
 
-      background: #5a6a7c;
+      background: $gray;
       &:hover {
-        background-color: #db3069;
+        background-color: $rose;
       }
     }
   }

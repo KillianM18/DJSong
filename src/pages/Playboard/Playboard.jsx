@@ -60,7 +60,7 @@ function Playboard() {
         >
           +
         </button>
-        <Link to="/playboard/parameters">Chercher un son</Link>
+        <Link to="/playboard/parameters" className="main__userChoice__link">Chercher un son</Link>
       </div>
       <Board nb_col={nbr_col} nb_line={nbr_line} />
     </div>
