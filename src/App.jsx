@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import Connexion from './pages/Connexion/Connexion.jsx';
 import Home_connexion from './pages/Home_connexion/Home_connexion.jsx';
 import Inscription from './pages/Inscription/Inscription.jsx';
@@ -12,25 +12,28 @@ function App() {
     <div className="app">
       <BrowserRouter>
         <Routes>
+          {/* Redirection automatique vers /connexion quand on arrive sur le site */}
+          <Route path="/" element={<Navigate to="/connexion" replace />} />
+          
           <Route
             path="/connexion"
             element={
-              <Connexion/>
+              <Connexion />
             }
           />
-          
+
           <Route
-              path="/home_connexion"
-              element={
-                <Home_connexion/>
-              }
-            />
+            path="/home_connexion"
+            element={
+              <Home_connexion />
+            }
+          />
           <Route
-              path="/inscription"
-              element={
-                <Inscription/>
-              }
-            />
+            path="/inscription"
+            element={
+              <Inscription />
+            }
+          />
 
         </Routes>
       </BrowserRouter>
