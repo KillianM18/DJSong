@@ -1,8 +1,14 @@
-// FFFFFB blanc
-// 313742 bleu foncé
-// 5A6A7C bleu gris
-// A2EBF0 bleu clair
-// DB3069 rose
+$color-btn: (
+  "drums": blue,
+  "synth": red,
+  "bass": pink,
+  "vocals": purple,
+  "fx": green,
+  "percussion": rgb(248, 248, 67),
+  "ambient": orange,
+  "loop": cyan,
+);
+
 .playboard {
   height: auto;
   width: auto;
@@ -30,8 +36,13 @@
 
       background: #5a6a7c;
       &:hover {
-        background-color: #db3069;
+        background: #db3069;
       }
     }
+  }
+}
+@each $tag, $color in $color-btn {
+  .#{$tag} {
+    background: $color;
   }
 }

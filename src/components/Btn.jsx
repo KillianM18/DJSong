@@ -1,5 +1,7 @@
 import "./board.scss";
-function Btn() {
-  return <button className="playboard__line__btn-container-play"></button>;
+function Btn({ tags }) {
+  return (
+    <button className={`playboard__line__btn-container-play ${tags}`}></button>
+  );
 }
 export default Btn;
