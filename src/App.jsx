@@ -7,12 +7,15 @@ import Profile from "./pages/Profile/Profile";
 import Playboard from "./pages/Playboard/Playboard";
 import PlayboardParam from "./pages/PlayboardParameters/PlayboardParam.jsx";
 import Header from "./layouts/Header/Header.jsx";
+import Footer from "./layouts/Footer/Footer.jsx";
 
-function LayoutWithHeader() {
+// Ce layout affichera le Header et le Footer autour de vos pages principales
+function MainLayout() {
   return (
     <>
       <Header />
       <Outlet />
+      <Footer />
     </>
   );
 }
@@ -22,14 +25,14 @@ function App() {
     <div className="app">
       <BrowserRouter>
         <Routes>
-          {/* --- Pages SANS Header --- */}
+          {/* --- Pages SANS Header ni Footer --- */}
           <Route path="/" element={<Navigate to="/connexion" replace />} />
           <Route path="/connexion" element={<Connexion />} />
           <Route path="/home_connexion" element={<Home_connexion />} />
           <Route path="/inscription" element={<Inscription />} />
 
-          {/* --- Pages AVEC Header --- */}
-          <Route element={<LayoutWithHeader />}>
+          {/* --- Pages AVEC Header et Footer --- */}
+          <Route element={<MainLayout />}>
             <Route path="/profile" element={<Profile />} />
             <Route path="/playboard" element={<Playboard />} />
             <Route path="/playboard/parameters" element={<PlayboardParam />} />
