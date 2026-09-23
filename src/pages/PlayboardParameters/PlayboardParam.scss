@@ -1,4 +1,4 @@
-@use "../../style/abstract/variables" as *;
+@use "../../style/abstract/shared" as *;
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
 
@@ -12,18 +12,20 @@ $accent-color: $rose;
 
 .playboard-param-container {
   min-height: 100vh;
-  background-color: $bg-color;
   color: $text-color;
   font-family: 'Inter', sans-serif;
   padding: 2rem;
   box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  
+  @include flex(
+    $direction: column,
+    $align: center,
+  );
 
   .playboard-param-content {
     width: 100%;
     max-width: 1200px;
+    
     display: flex;
     flex-direction: column;
     gap: 2rem;
