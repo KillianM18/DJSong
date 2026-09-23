@@ -1,9 +1,11 @@
+@use "../../style/abstract/shared" as *;
+
 .musicCard {
   padding: 3vh;
-  border: 1px solid #a2ebf0;
+  border: 1px solid $blue;
 
   & a {
-    color: #a2ebf0;
+    color: $blue;
     text-decoration: none;
   }
   & a:hover,
