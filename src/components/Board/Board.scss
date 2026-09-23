@@ -6,6 +6,7 @@
 
 @use "sass:color";
 @use "../../style/abstract/variables" as *;
+@use "../../style/abstract/shared" as *;
 
 $color-btn: (
   "drums": blue,
@@ -22,9 +23,11 @@ $color-btn: (
   height: auto;
   width: auto;
   background: $white;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  @include flex(
+    $direction: column,
+    $justify: space-between
+  );
+
   padding: 1rem;
   border-radius: 1rem;
   border: 0.4rem solid $blue;
@@ -36,6 +39,10 @@ $color-btn: (
     justify-content: space-around;
     align-items: center;
 
+    @include flex(
+      $align: center,
+      $justify: space-around
+    );
 
     &__btn-container-play {
       margin: 1.5rem;

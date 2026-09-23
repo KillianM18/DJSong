@@ -4,18 +4,26 @@ import { usePlayboard } from '../../context/PlayboardContext';
 import { useNavigate } from 'react-router-dom';
 import "./PlayboardParam.scss";
 
-const API_KEY = 'LvuTO0bluMYDQpYKGRPbqZidQKQUyaaFG0JTc5U1';
-const API_URL = 'https://freesound.org/apiv2/search/text/';
+const API_KEY = "LvuTO0bluMYDQpYKGRPbqZidQKQUyaaFG0JTc5U1";
+const API_URL = "https://freesound.org/apiv2/search/text/";
 
 const CATEGORIES = [
-  'Tous', 'Drums', 'Synth', 'Bass', 'Vocals', 'FX', 'Percussion', 'Ambient', 'Loop'
+  "Tous",
+  "Drums",
+  "Synth",
+  "Bass",
+  "Vocals",
+  "FX",
+  "Percussion",
+  "Ambient",
+  "Loop",
 ];
 
 const DURATION_FILTERS = [
-  { label: 'Toutes durées', value: '' },
-  { label: 'One-shots (< 2s)', value: 'duration:[0.0 TO 2.0]' },
-  { label: 'Courtes (2s - 5s)', value: 'duration:[2.0 TO 5.0]' },
-  { label: 'Longues (> 5s)', value: 'duration:[5.0 TO *]' }
+  { label: "Toutes durées", value: "" },
+  { label: "One-shots (< 2s)", value: "duration:[0.0 TO 2.0]" },
+  { label: "Courtes (2s - 5s)", value: "duration:[2.0 TO 5.0]" },
+  { label: "Longues (> 5s)", value: "duration:[5.0 TO *]" },
 ];
 
 const detectSoundTag = (sound) => {
@@ -73,7 +81,7 @@ const Waveform = ({ sound, isPlaying, audioRef }) => {
 
   if (!waveformUrl) {
     return (
-      <div className="waveform-container" style={{ background: '#5A6A7C' }}>
+      <div className="waveform-container" style={{ background: "#5A6A7C" }}>
         <div className="waveform-progress" style={{ width: `${progress}%` }} />
       </div>
     );
@@ -84,7 +92,7 @@ const Waveform = ({ sound, isPlaying, audioRef }) => {
       className="waveform-container"
       style={{
         WebkitMaskImage: `url(${waveformUrl})`,
-        maskImage: `url(${waveformUrl})`
+        maskImage: `url(${waveformUrl})`,
       }}
     >
       <div className="waveform-progress" style={{ width: `${progress}%` }} />
@@ -112,31 +120,34 @@ export default function PlayboardParam() {
 
   const audioRef = useRef(null);
   const searchTimeoutRef = useRef(null);
-  const lastFetchedQueryRef = useRef('');
+  const lastFetchedQueryRef = useRef("");
 
-  const fetchSounds = useCallback(async (searchQuery, targetPage = 1, filterStr = durationFilter) => {
-    setIsLoading(true);
-    lastFetchedQueryRef.current = searchQuery;
-    setPage(targetPage);
+  const fetchSounds = useCallback(
+    async (searchQuery, targetPage = 1, filterStr = durationFilter) => {
+      setIsLoading(true);
+      lastFetchedQueryRef.current = searchQuery;
+      setPage(targetPage);
 
-    try {
-      const actualQuery = searchQuery === 'Tous' ? '' : searchQuery;
-      let url = `${API_URL}?query=${encodeURIComponent(actualQuery)}&token=${API_KEY}&fields=id,name,previews,duration,username,images,tags&page_size=12&page=${targetPage}`;
-      if (filterStr) {
-        url += `&filter=${encodeURIComponent(filterStr)}`;
+      try {
+        const actualQuery = searchQuery === "Tous" ? "" : searchQuery;
+        let url = `${API_URL}?query=${encodeURIComponent(actualQuery)}&token=${API_KEY}&fields=id,name,previews,duration,username,images&page_size=12&page=${targetPage}`;
+        if (filterStr) {
+          url += `&filter=${encodeURIComponent(filterStr)}`;
+        }
+
+        const response = await fetch(url);
+        const data = await response.json();
+
+        setResults(data.results || []);
+        setHasNextPage(!!data.next);
+      } catch (error) {
+        console.error("Error fetching sounds:", error);
+      } finally {
+        setIsLoading(false);
       }
-
-      const response = await fetch(url);
-      const data = await response.json();
-
-      setResults(data.results || []);
-      setHasNextPage(!!data.next);
-    } catch (error) {
-      console.error('Error fetching sounds:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [durationFilter]);
+    },
+    [durationFilter],
+  );
 
   useEffect(() => {
     if (searchTimeoutRef.current) {
@@ -157,13 +168,13 @@ export default function PlayboardParam() {
   useEffect(() => {
     if (activeCategory) {
       fetchSounds(activeCategory, 1);
-      setQuery('');
+      setQuery("");
     }
   }, [activeCategory, durationFilter, fetchSounds]);
 
   useEffect(() => {
-    if (activeCategory === 'Tous') {
-      fetchSounds('Tous', 1);
+    if (activeCategory === "Tous") {
+      fetchSounds("Tous", 1);
     }
   }, []);
 
@@ -172,7 +183,7 @@ export default function PlayboardParam() {
     if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
 
     if (query.trim()) {
-      setActiveCategory('');
+      setActiveCategory("");
       fetchSounds(query, 1);
     }
   };
@@ -201,14 +212,15 @@ export default function PlayboardParam() {
   };
 
   const formatDuration = (seconds) => {
-    if (!seconds) return '0:00';
+    if (!seconds) return "0:00";
     const m = Math.floor(seconds / 60);
     const s = Math.floor(seconds % 60);
-    return `${m}:${s.toString().padStart(2, '0')}`;
+    return `${m}:${s.toString().padStart(2, "0")}`;
   };
 
   const togglePlay = (sound) => {
-    const previewUrl = sound.previews['preview-hq-mp3'] || sound.previews['preview-lq-ogg'];
+    const previewUrl =
+      sound.previews["preview-hq-mp3"] || sound.previews["preview-lq-ogg"];
 
     if (!previewUrl) return;
 
@@ -238,31 +250,9 @@ export default function PlayboardParam() {
   return (
     <div className="playboard-param-container">
       <div className="playboard-param-content">
-
-        <button className="back-btn" onClick={() => navigate('/playboard')}>
-          <ArrowLeft size={20} /> Retour au Launchpad
-        </button>
-
-        <header className="playboard-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div>
-            <h1>Bibliothèque de Sons</h1>
-            <p>Trouvez le son parfait pour votre prochain beat</p>
-          </div>
-          <button
-            className="manage-board-btn"
-            onClick={() => setIsManageModalOpen(true)}
-            style={{
-              padding: '0.75rem 1.5rem',
-              backgroundColor: 'rgba(255, 255, 255, 0.1)',
-              border: '1px solid rgba(255, 255, 255, 0.3)',
-              color: 'white',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              fontWeight: '500'
-            }}
-          >
-            Gérer le Playboard
-          </button>
+        <header className="playboard-header">
+          <h1>Bibliothèque de Sons</h1>
+          <p>Trouvez le son parfait pour votre prochain beat</p>
         </header>
 
         <div className="search-filter-wrapper">
@@ -276,11 +266,13 @@ export default function PlayboardParam() {
                 value={query}
                 onChange={(e) => {
                   setQuery(e.target.value);
-                  setActiveCategory('');
+                  setActiveCategory("");
                 }}
               />
             </div>
-            <button type="submit" className="search-button">Rechercher</button>
+            <button type="submit" className="search-button">
+              Rechercher
+            </button>
           </form>
 
           <div className="filter-wrapper">
@@ -290,18 +282,20 @@ export default function PlayboardParam() {
               value={durationFilter}
               onChange={handleFilterChange}
             >
-              {DURATION_FILTERS.map(f => (
-                <option key={f.label} value={f.value}>{f.label}</option>
+              {DURATION_FILTERS.map((f) => (
+                <option key={f.label} value={f.value}>
+                  {f.label}
+                </option>
               ))}
             </select>
           </div>
         </div>
 
         <div className="categories-container">
-          {CATEGORIES.map(category => (
+          {CATEGORIES.map((category) => (
             <button
               key={category}
-              className={`category-chip ${activeCategory === category ? 'active' : ''}`}
+              className={`category-chip ${activeCategory === category ? "active" : ""}`}
               onClick={() => setActiveCategory(category)}
             >
               {category}
@@ -319,14 +313,18 @@ export default function PlayboardParam() {
             {results.length > 0 ? (
               <>
                 <div className="results-grid">
-                  {results.map(sound => (
+                  {results.map((sound) => (
                     <div key={sound.id} className="sound-card">
                       <div className="sound-card-header">
                         <div>
-                          <h3 className="sound-title" title={sound.name}>{sound.name}</h3>
+                          <h3 className="sound-title" title={sound.name}>
+                            {sound.name}
+                          </h3>
                           <p className="sound-author">par {sound.username}</p>
                         </div>
-                        <span className="sound-duration">{formatDuration(sound.duration)}</span>
+                        <span className="sound-duration">
+                          {formatDuration(sound.duration)}
+                        </span>
                       </div>
 
                       <Waveform
@@ -337,10 +335,14 @@ export default function PlayboardParam() {
 
                       <div className="sound-controls">
                         <button
-                          className={`play-button ${playingId === sound.id ? 'playing' : ''}`}
+                          className={`play-button ${playingId === sound.id ? "playing" : ""}`}
                           onClick={() => togglePlay(sound)}
                         >
-                          {playingId === sound.id ? <Pause size={24} /> : <Play size={24} style={{ marginLeft: '4px' }} />}
+                          {playingId === sound.id ? (
+                            <Pause size={24} />
+                          ) : (
+                            <Play size={24} style={{ marginLeft: "4px" }} />
+                          )}
                         </button>
 
                         <button
@@ -375,7 +377,8 @@ export default function PlayboardParam() {
                 </div>
               </>
             ) : (
-              !isLoading && (query || activeCategory) && (
+              !isLoading &&
+              (query || activeCategory) && (
                 <div className="no-results">
                   <p>Aucun son trouvé. Essayez une autre recherche.</p>
                 </div>
