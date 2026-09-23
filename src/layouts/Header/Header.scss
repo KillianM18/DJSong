@@ -1,0 +1,17 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5vw;
+  height: 5vh;
+
+&__logo{
+  height: 100%;
+}
+
+  &__profileLogo{
+    color: #a2ebf0;
+    height: 5vh;
+  }
+
+}

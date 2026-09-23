@@ -6,39 +6,21 @@ import Inscription from './pages/Inscription/Inscription.jsx';
 import Profile from "./pages/Profile/Profile";
 import Playboard from "./pages/Playboard/Playboard";
 import PlayboardParam from "./pages/PlayboardParameters/PlayboardParam.jsx";
-
-
+import Temp from "./pages/Temp/Temp";
 
 function App() {
-
   return (
     <div className="app">
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Navigate to="/connexion" replace />} />
-          <Route
-            path="/connexion"
-            element={
-              <Connexion />
-            }
-          />
-
-          <Route
-            path="/home_connexion"
-            element={
-              <Home_connexion />
-            }
-          />
-          <Route
-            path="/inscription"
-            element={
-              <Inscription />
-            }
-          />
-
+          <Route path="/connexion" element={<Connexion />} />
+          <Route path="/home_connexion" element={<Home_connexion />} />
+          <Route path="/inscription" element={<Inscription />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/playboard" element={<Playboard />} />
           <Route path="/playboard/parameters" element={<PlayboardParam />} />
+          <Route path="/temp" element={<Temp />} />
         </Routes>
       </BrowserRouter>
     </div>
