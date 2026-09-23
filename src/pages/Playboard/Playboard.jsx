@@ -1,5 +1,5 @@
 import "./Playboard.scss";
-import Board from "../../components/Board";
+import Board from "../../components/Board/Board";
 import { Link } from "react-router-dom";
 import Timeline from "../../components/Timeline/Timeline";
 
@@ -7,6 +7,8 @@ import { useState } from "react";
 function Playboard() {
   const [nbr_line, setLine] = useState(3);
   const [nbr_col, setCol] = useState(3);
+  const [isNewLine, setIsNewLine] = useState(false);
+  const [isNewColumn, setIsNewColumn] = useState(false);
   // Limit the button's number on the playboard
   if (nbr_line > 6 || nbr_col > 6) {
     if (nbr_line > 6) {
@@ -31,17 +33,24 @@ function Playboard() {
 
   return (
     <div className="main">
+      
       <div className="main__userChoice">
         <span>Lignes :</span>
         <button
-          onClick={() => setLine(nbr_line - 1)}
+          onClick={() => {
+            setLine(nbr_line - 1);
+            setIsNewLine(false);
+          }}
           className="main__userChoice__btn"
         >
           -
         </button>
         <span>{nbr_line}</span>
         <button
-          onClick={() => setLine(nbr_line + 1)}
+          onClick={() => {
+            setLine(nbr_line + 1);
+            setIsNewLine(true);
+          }}
           className="main__userChoice__btn"
         >
           +
@@ -49,21 +58,32 @@ function Playboard() {
 
         <span>Colonnes :</span>
         <button
-          onClick={() => setCol(nbr_col - 1)}
+          onClick={() => {
+            setCol(nbr_col - 1);
+            setIsNewColumn(false);
+          }}
           className="main__userChoice__btn"
         >
           -
         </button>
         <span>{nbr_col}</span>
         <button
-          onClick={() => setCol(nbr_col + 1)}
+          onClick={() => {
+            setCol(nbr_col + 1);
+            setIsNewColumn(true);
+          }}
           className="main__userChoice__btn"
         >
           +
         </button>
         <Link to="/playboard/parameters" className="main__userChoice__link">Chercher un son</Link>
       </div>
-      <Board nb_col={nbr_col} nb_line={nbr_line} />
+      <Board
+        nb_col={nbr_col}
+        nb_line={nbr_line}
+        isNewLine={isNewLine}
+        isNewColumn={isNewColumn}
+      />
       
       {/* Intégration de la Timeline */}
       <Timeline />
