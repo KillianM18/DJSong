@@ -26,7 +26,7 @@ function App() {
       </div>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Navigate to="/connexion" replace />} />
+          <Route path="/" element={<Navigate to="/home_connexion" replace />} />
           <Route
             path="/connexion"
             element={
