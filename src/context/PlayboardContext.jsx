@@ -5,38 +5,37 @@ const PlayboardContext = createContext();
 export const usePlayboard = () => useContext(PlayboardContext);
 
 export const PlayboardProvider = ({ children }) => {
-  // --- ÉTAT DES PADS (max 36 pour du 6x6) ---
+  // ÉTAT DES PADS
   const [pads, setPads] = useState(Array(36).fill(null));
-  
-  // --- ÉTAT DE LA GRILLE ---
+
+  // ÉTAT DE LA GRILLE
   const [nbr_line, setLine] = useState(3);
   const [nbr_col, setCol] = useState(3);
 
-  // --- ÉTAT DE LA TIMELINE ---
-  // Un événement : { id: string, padIndex: number, sound: object, startTime: number (secondes) }
+  // ÉTAT DE LA TIMELINE
   const [events, setEvents] = useState([]);
-  
+
   const [isRecording, setIsRecording] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0); // en secondes
-  
-  // Durée totale de la timeline (par défaut 10s, peut s'étendre)
-  const [timelineDuration, setTimelineDuration] = useState(10); 
+
+  // Durée totale de la timeline
+  const [timelineDuration, setTimelineDuration] = useState(10);
 
   const timerRef = useRef(null);
   const lastTimeRef = useRef(0);
   const playingAudiosRef = useRef([]); // Garde une trace des audios en cours de lecture
   const lastPlayedEventIndicesRef = useRef(new Set()); // Pour ne pas rejouer le même événement
 
-  // --- ACTIONS DES PADS ---
+  // ACTIONS DES PADS
   const assignSoundToPad = (sound, padIndex) => {
     if (padIndex >= 0 && padIndex < pads.length) {
       const newPads = [...pads];
       newPads[padIndex] = sound;
       setPads(newPads);
-      return true; // Succès
+      return true;
     }
-    return false; // Index invalide
+    return false;
   };
 
   const deleteSoundFromPad = (padIndex) => {
@@ -67,36 +66,36 @@ export const PlayboardProvider = ({ children }) => {
   const handlePadClick = (padIndex) => {
     const sound = pads[padIndex];
 
-    // 1. Jouer le son si existant
+    // Joue le son si existant
     if (sound) {
       const previewUrl = sound.previews?.['preview-hq-mp3'] || sound.previews?.['preview-lq-ogg'];
       playSound(previewUrl);
     }
 
-    // 2. Si on enregistre, on ajoute à la timeline (sur la première piste dispo)
+    // Si on enregistre, on ajoute à la timeline
     if (isRecording) {
       const duration = sound?.duration > 0 ? sound.duration : 1;
-      
+
       setEvents(prev => {
-        // Trouver la piste disponible
+        // Trouve la piste disponible
         let trackIndex = 0;
         let trackFound = false;
-        
+
         while (!trackFound) {
-          // Vérifier si cette piste est libre à currentTime
-          const isOccupied = prev.some(ev => 
+          // Vérifie si cette piste est libre à currentTime
+          const isOccupied = prev.some(ev =>
             ev.trackIndex === trackIndex &&
-            currentTime >= ev.startTime && 
+            currentTime >= ev.startTime &&
             currentTime < ev.startTime + ((ev.sound?.duration > 0 ? ev.sound.duration : 1))
           );
-          
+
           if (!isOccupied) {
             trackFound = true;
           } else {
             trackIndex++;
           }
         }
-        
+
         const newEvent = {
           id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
           padIndex,
@@ -108,12 +107,12 @@ export const PlayboardProvider = ({ children }) => {
         const next = [...prev, newEvent];
         return next.sort((a, b) => a.startTime - b.startTime);
       });
-      
+
       checkAndExtendTimeline(currentTime);
     }
   };
 
-  // --- ACTIONS DE LA TIMELINE ---
+  // ACTIONS DE LA TIMELINE
   const toggleRecording = () => {
     if (isPlaying) pausePlayback();
     setIsRecording(!isRecording);
@@ -137,7 +136,7 @@ export const PlayboardProvider = ({ children }) => {
 
   const togglePlayback = () => {
     if (isRecording) setIsRecording(false);
-    
+
     if (isPlaying) {
       pausePlayback();
     } else {
@@ -146,8 +145,7 @@ export const PlayboardProvider = ({ children }) => {
         setCurrentTime(0);
         lastPlayedEventIndicesRef.current.clear();
       } else {
-        // Nettoyer les audios passés pour pouvoir re-déclencher les futurs
-        // Si on reprend la lecture, on ne rejoue pas ce qui est déjà passé
+        // Nettoyer les audios passés pour pouvoir redéclencher
         events.forEach((ev) => {
           if (ev.startTime < currentTime) {
             lastPlayedEventIndicesRef.current.add(ev.id);
@@ -184,7 +182,7 @@ export const PlayboardProvider = ({ children }) => {
   const updateTime = useCallback((timestamp) => {
     const delta = (timestamp - lastTimeRef.current) / 1000; // en secondes
     lastTimeRef.current = timestamp;
-    
+
     setCurrentTime(prev => {
       const nextTime = prev + delta;
       checkAndExtendTimeline(nextTime);
@@ -197,11 +195,11 @@ export const PlayboardProvider = ({ children }) => {
   const updatePlaybackTime = useCallback((timestamp) => {
     const delta = (timestamp - lastTimeRef.current) / 1000;
     lastTimeRef.current = timestamp;
-    
+
     setCurrentTime(prev => {
       const nextTime = prev + delta;
       checkAndExtendTimeline(nextTime);
-      
+
       // Vérifier si des événements doivent être joués entre prev et nextTime
       events.forEach((ev) => {
         if (ev.startTime >= prev && ev.startTime < nextTime && !lastPlayedEventIndicesRef.current.has(ev.id)) {
@@ -225,7 +223,7 @@ export const PlayboardProvider = ({ children }) => {
     }
   }, [events, isPlaying, timelineDuration]);
 
-  // Si on est en train de jouer, relancer la boucle (utile pour le state management)
+  // Si on est en train de jouer, relancer la boucle
   useEffect(() => {
     if (isPlaying) {
       cancelAnimationFrame(timerRef.current);
@@ -237,7 +235,7 @@ export const PlayboardProvider = ({ children }) => {
 
   const updateEventPosition = (id, newStartTime, newTrackIndex) => {
     setEvents(prev => {
-      const next = prev.map(ev => 
+      const next = prev.map(ev =>
         ev.id === id ? { ...ev, startTime: Math.max(0, newStartTime), trackIndex: newTrackIndex } : ev
       );
       return next.sort((a, b) => a.startTime - b.startTime);

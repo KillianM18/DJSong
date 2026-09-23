@@ -11,7 +11,7 @@ import Header from "./layouts/Header/Header.jsx";
 import Footer from "./layouts/Footer/Footer.jsx";
 import FloatingLines from './components/FloatingLines/FloatingLines';
 
-// Ce layout affichera le Header et le Footer autour de vos pages principales
+// Ce layout affichera le Header et le Footer autour des pages principales
 function MainLayout() {
   return (
     <>
@@ -40,13 +40,13 @@ function App() {
         </div>
         <BrowserRouter>
           <Routes>
-            {/* --- Pages SANS Header ni Footer --- */}
+            {/* Pages SANS Header ni Footer */}
             <Route path="/" element={<Navigate to="/home_connexion" replace />} />
             <Route path="/connexion" element={<Connexion />} />
             <Route path="/home_connexion" element={<Home_connexion />} />
             <Route path="/inscription" element={<Inscription />} />
 
-            {/* --- Pages AVEC Header et Footer --- */}
+            {/* Pages AVEC Header et Footer */}
             <Route element={<MainLayout />}>
               <Route path="/profile" element={<Profile />} />
               <Route path="/playboard" element={<Playboard />} />

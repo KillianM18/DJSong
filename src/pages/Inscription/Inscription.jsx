@@ -14,7 +14,6 @@ function Inscription() {
   const handleSubmit = (e) => {
     e.preventDefault();
     navigate('/playboard');
-    // Handle form submission logic here
   };
 
   return (

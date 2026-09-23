@@ -10,7 +10,6 @@ function Playboard() {
   const { nbr_line, setLine, nbr_col, setCol } = usePlayboard();
   const [isNewLine, setIsNewLine] = useState(false);
   const [isNewColumn, setIsNewColumn] = useState(false);
-  // Limit the button's number on the playboard
   if (nbr_line > 6 || nbr_col > 6) {
     if (nbr_line > 6) {
       setLine(6);
@@ -34,7 +33,7 @@ function Playboard() {
 
   return (
     <div className="main">
-      
+
       <div className="main__userChoice">
         <span>Lignes :</span>
         <button
@@ -85,8 +84,8 @@ function Playboard() {
         isNewLine={isNewLine}
         isNewColumn={isNewColumn}
       />
-      
-      {/* Intégration de la Timeline */}
+
+      {/*Intégration de la Timeline*/}
       <Timeline />
     </div>
   );
