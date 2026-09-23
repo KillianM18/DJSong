@@ -1,10 +1,9 @@
 @use "../../style/abstract/shared" as *;
 
 .profile{
-
     margin:5vw;
     // height: 80vh;
-
+    flex:1;
     &__header{
         @include flex(
             $direction: column,
