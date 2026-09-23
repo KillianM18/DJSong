@@ -34,6 +34,8 @@ $color-btn: (
     justify-content: space-around;
     align-items: center;
     // background-color: blue;
+
+
     &__btn-container-play {
       margin: 1.5rem;
       height: 6vh;
@@ -46,7 +48,35 @@ $color-btn: (
       &:hover {
         background-color: $rose;
       }
+
+      &--last{
+        animation: Columnappear 1s ease-in-out;
+      }
     }
+  }
+      &__lastLine{
+      animation: Lineappear 1s ease-in-out;
+    }
+}
+@keyframes Lineappear {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes Columnappear {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
   }
 }
 
