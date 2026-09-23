@@ -1,19 +1,37 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Search, Play, Pause, Plus, Music2, ArrowLeft, ChevronLeft, ChevronRight, Filter } from 'lucide-react';
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import {
+  Search,
+  Play,
+  Pause,
+  Plus,
+  Music2,
+  ArrowLeft,
+  ChevronLeft,
+  ChevronRight,
+  Filter,
+} from "lucide-react";
 import "./PlayboardParam.scss";
 
-const API_KEY = 'LvuTO0bluMYDQpYKGRPbqZidQKQUyaaFG0JTc5U1';
-const API_URL = 'https://freesound.org/apiv2/search/text/';
+const API_KEY = "LvuTO0bluMYDQpYKGRPbqZidQKQUyaaFG0JTc5U1";
+const API_URL = "https://freesound.org/apiv2/search/text/";
 
 const CATEGORIES = [
-  'Tous', 'Drums', 'Synth', 'Bass', 'Vocals', 'FX', 'Percussion', 'Ambient', 'Loop'
+  "Tous",
+  "Drums",
+  "Synth",
+  "Bass",
+  "Vocals",
+  "FX",
+  "Percussion",
+  "Ambient",
+  "Loop",
 ];
 
 const DURATION_FILTERS = [
-  { label: 'Toutes durées', value: '' },
-  { label: 'One-shots (< 2s)', value: 'duration:[0.0 TO 2.0]' },
-  { label: 'Courtes (2s - 5s)', value: 'duration:[2.0 TO 5.0]' },
-  { label: 'Longues (> 5s)', value: 'duration:[5.0 TO *]' }
+  { label: "Toutes durées", value: "" },
+  { label: "One-shots (< 2s)", value: "duration:[0.0 TO 2.0]" },
+  { label: "Courtes (2s - 5s)", value: "duration:[2.0 TO 5.0]" },
+  { label: "Longues (> 5s)", value: "duration:[5.0 TO *]" },
 ];
 
 const Waveform = ({ sound, isPlaying, audioRef }) => {
@@ -53,7 +71,7 @@ const Waveform = ({ sound, isPlaying, audioRef }) => {
 
   if (!waveformUrl) {
     return (
-      <div className="waveform-container" style={{ background: '#5A6A7C' }}>
+      <div className="waveform-container" style={{ background: "#5A6A7C" }}>
         <div className="waveform-progress" style={{ width: `${progress}%` }} />
       </div>
     );
@@ -64,7 +82,7 @@ const Waveform = ({ sound, isPlaying, audioRef }) => {
       className="waveform-container"
       style={{
         WebkitMaskImage: `url(${waveformUrl})`,
-        maskImage: `url(${waveformUrl})`
+        maskImage: `url(${waveformUrl})`,
       }}
     >
       <div className="waveform-progress" style={{ width: `${progress}%` }} />
@@ -73,9 +91,9 @@ const Waveform = ({ sound, isPlaying, audioRef }) => {
 };
 
 export default function PlayboardParam({ onAddSound, onClose }) {
-  const [query, setQuery] = useState('');
-  const [activeCategory, setActiveCategory] = useState('Tous');
-  const [durationFilter, setDurationFilter] = useState('');
+  const [query, setQuery] = useState("");
+  const [activeCategory, setActiveCategory] = useState("Tous");
+  const [durationFilter, setDurationFilter] = useState("");
   const [results, setResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [playingId, setPlayingId] = useState(null);
@@ -86,31 +104,34 @@ export default function PlayboardParam({ onAddSound, onClose }) {
 
   const audioRef = useRef(null);
   const searchTimeoutRef = useRef(null);
-  const lastFetchedQueryRef = useRef('');
+  const lastFetchedQueryRef = useRef("");
 
-  const fetchSounds = useCallback(async (searchQuery, targetPage = 1, filterStr = durationFilter) => {
-    setIsLoading(true);
-    lastFetchedQueryRef.current = searchQuery;
-    setPage(targetPage);
+  const fetchSounds = useCallback(
+    async (searchQuery, targetPage = 1, filterStr = durationFilter) => {
+      setIsLoading(true);
+      lastFetchedQueryRef.current = searchQuery;
+      setPage(targetPage);
 
-    try {
-      const actualQuery = searchQuery === 'Tous' ? '' : searchQuery;
-      let url = `${API_URL}?query=${encodeURIComponent(actualQuery)}&token=${API_KEY}&fields=id,name,previews,duration,username,images&page_size=12&page=${targetPage}`;
-      if (filterStr) {
-        url += `&filter=${encodeURIComponent(filterStr)}`;
+      try {
+        const actualQuery = searchQuery === "Tous" ? "" : searchQuery;
+        let url = `${API_URL}?query=${encodeURIComponent(actualQuery)}&token=${API_KEY}&fields=id,name,previews,duration,username,images&page_size=12&page=${targetPage}`;
+        if (filterStr) {
+          url += `&filter=${encodeURIComponent(filterStr)}`;
+        }
+
+        const response = await fetch(url);
+        const data = await response.json();
+
+        setResults(data.results || []);
+        setHasNextPage(!!data.next);
+      } catch (error) {
+        console.error("Error fetching sounds:", error);
+      } finally {
+        setIsLoading(false);
       }
-
-      const response = await fetch(url);
-      const data = await response.json();
-
-      setResults(data.results || []);
-      setHasNextPage(!!data.next);
-    } catch (error) {
-      console.error('Error fetching sounds:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [durationFilter]);
+    },
+    [durationFilter],
+  );
 
   // Handle Search input with 3 seconds debounce
   useEffect(() => {
@@ -133,14 +154,14 @@ export default function PlayboardParam({ onAddSound, onClose }) {
   useEffect(() => {
     if (activeCategory) {
       fetchSounds(activeCategory, 1);
-      setQuery('');
+      setQuery("");
     }
   }, [activeCategory, durationFilter, fetchSounds]);
 
   // Initial fetch on mount if 'Tous' is the active category
   useEffect(() => {
-    if (activeCategory === 'Tous') {
-      fetchSounds('Tous', 1);
+    if (activeCategory === "Tous") {
+      fetchSounds("Tous", 1);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -151,7 +172,7 @@ export default function PlayboardParam({ onAddSound, onClose }) {
     if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
 
     if (query.trim()) {
-      setActiveCategory('');
+      setActiveCategory("");
       fetchSounds(query, 1);
     }
   };
@@ -180,14 +201,15 @@ export default function PlayboardParam({ onAddSound, onClose }) {
   };
 
   const formatDuration = (seconds) => {
-    if (!seconds) return '0:00';
+    if (!seconds) return "0:00";
     const m = Math.floor(seconds / 60);
     const s = Math.floor(seconds % 60);
-    return `${m}:${s.toString().padStart(2, '0')}`;
+    return `${m}:${s.toString().padStart(2, "0")}`;
   };
 
   const togglePlay = (sound) => {
-    const previewUrl = sound.previews['preview-hq-mp3'] || sound.previews['preview-lq-ogg'];
+    const previewUrl =
+      sound.previews["preview-hq-mp3"] || sound.previews["preview-lq-ogg"];
 
     if (!previewUrl) return;
 
@@ -218,11 +240,6 @@ export default function PlayboardParam({ onAddSound, onClose }) {
   return (
     <div className="playboard-param-container">
       <div className="playboard-param-content">
-
-        <button className="back-btn" onClick={onClose}>
-          <ArrowLeft size={20} /> Retour au Launchpad
-        </button>
-
         <header className="playboard-header">
           <h1>Bibliothèque de Sons</h1>
           <p>Trouvez le son parfait pour votre prochain beat</p>
@@ -239,11 +256,13 @@ export default function PlayboardParam({ onAddSound, onClose }) {
                 value={query}
                 onChange={(e) => {
                   setQuery(e.target.value);
-                  setActiveCategory('');
+                  setActiveCategory("");
                 }}
               />
             </div>
-            <button type="submit" className="search-button">Rechercher</button>
+            <button type="submit" className="search-button">
+              Rechercher
+            </button>
           </form>
 
           <div className="filter-wrapper">
@@ -253,18 +272,20 @@ export default function PlayboardParam({ onAddSound, onClose }) {
               value={durationFilter}
               onChange={handleFilterChange}
             >
-              {DURATION_FILTERS.map(f => (
-                <option key={f.label} value={f.value}>{f.label}</option>
+              {DURATION_FILTERS.map((f) => (
+                <option key={f.label} value={f.value}>
+                  {f.label}
+                </option>
               ))}
             </select>
           </div>
         </div>
 
         <div className="categories-container">
-          {CATEGORIES.map(category => (
+          {CATEGORIES.map((category) => (
             <button
               key={category}
-              className={`category-chip ${activeCategory === category ? 'active' : ''}`}
+              className={`category-chip ${activeCategory === category ? "active" : ""}`}
               onClick={() => setActiveCategory(category)}
             >
               {category}
@@ -282,14 +303,18 @@ export default function PlayboardParam({ onAddSound, onClose }) {
             {results.length > 0 ? (
               <>
                 <div className="results-grid">
-                  {results.map(sound => (
+                  {results.map((sound) => (
                     <div key={sound.id} className="sound-card">
                       <div className="sound-card-header">
                         <div>
-                          <h3 className="sound-title" title={sound.name}>{sound.name}</h3>
+                          <h3 className="sound-title" title={sound.name}>
+                            {sound.name}
+                          </h3>
                           <p className="sound-author">par {sound.username}</p>
                         </div>
-                        <span className="sound-duration">{formatDuration(sound.duration)}</span>
+                        <span className="sound-duration">
+                          {formatDuration(sound.duration)}
+                        </span>
                       </div>
 
                       <Waveform
@@ -300,10 +325,14 @@ export default function PlayboardParam({ onAddSound, onClose }) {
 
                       <div className="sound-controls">
                         <button
-                          className={`play-button ${playingId === sound.id ? 'playing' : ''}`}
+                          className={`play-button ${playingId === sound.id ? "playing" : ""}`}
                           onClick={() => togglePlay(sound)}
                         >
-                          {playingId === sound.id ? <Pause size={24} /> : <Play size={24} style={{ marginLeft: '4px' }} />}
+                          {playingId === sound.id ? (
+                            <Pause size={24} />
+                          ) : (
+                            <Play size={24} style={{ marginLeft: "4px" }} />
+                          )}
                         </button>
 
                         <button
@@ -338,7 +367,8 @@ export default function PlayboardParam({ onAddSound, onClose }) {
                 </div>
               </>
             ) : (
-              !isLoading && (query || activeCategory) && (
+              !isLoading &&
+              (query || activeCategory) && (
                 <div className="no-results">
                   <p>Aucun son trouvé. Essayez une autre recherche.</p>
                 </div>

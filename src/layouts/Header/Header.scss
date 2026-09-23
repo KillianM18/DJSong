@@ -1,17 +1,21 @@
+@use "../../style/abstract/shared" as *;
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 2vw;
-  height: 5vh;
+  padding: 1rem;
+  height: 6vh;
+  background-color: $blue;
 
   &__logo {
     height: 100%;
   }
-
-  &__profileLogo {
-    color: #a2ebf0;
-    height: 5vh;
+  &__profile {
+    height: 100%;
+    width: auto;
+    @include flex($justify: end, $align: center);
   }
-
+  &__profileLogo {
+    height: 60%;
+  }
 }
