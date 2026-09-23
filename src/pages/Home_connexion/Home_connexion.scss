@@ -1,0 +1,33 @@
+@use "../../style/abstract/variables" as *;
+
+
+.Home_connexion {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    .right{
+        width: 60%;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        h1{
+            color: $blue;
+            font-size: 50px;
+            margin-bottom: 50px;
+        }
+
+        .button-container{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            
+        }
+    }
+}

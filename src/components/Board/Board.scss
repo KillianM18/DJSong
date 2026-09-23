@@ -1,0 +1,140 @@
+// FFFFFB blanc
+// 313742 bleu foncé
+// 5A6A7C bleu gris
+// A2EBF0 bleu clair
+// DB3069 rose
+
+@use "sass:color";
+@use "../../style/abstract/variables" as *;
+
+$color-btn: (
+  "drums": blue,
+  "synth": red,
+  "bass": pink,
+  "vocals": purple,
+  "fx": green,
+  "percussion": rgb(248, 248, 67),
+  "ambient": orange,
+  "loop": cyan,
+);
+
+.playboard {
+  height: auto;
+  width: auto;
+  background: $white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1rem;
+  border-radius: 1rem;
+  border: 0.4rem solid $blue;
+
+  &__line {
+    width: auto;
+    height: auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+
+    &__btn-container-play {
+      margin: 1.5rem;
+      height: 6vh;
+      width: 6vh;
+
+      border-radius: 0.4rem;
+      border: 2px solid transparent;
+
+      background: $gray;
+      transition: all 0.15s ease-out;
+      box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.6);
+
+      &:hover {
+        background-color: $rose;
+        box-shadow: 0 0 15px rgba($rose, 0.6);
+        transform: scale(1.05);
+      }
+
+      &:active {
+        transform: scale(0.95);
+      }
+
+      &--last {
+        animation: Columnappear 1s ease-in-out;
+      }
+    }
+  }
+
+  &__lastLine {
+    animation: Lineappear 1s ease-in-out;
+  }
+}
+
+@keyframes Lineappear {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes Columnappear {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@each $tag, $color in $color-btn {
+  .#{$tag} {
+    // État normal (pad chargé)
+    background-color: rgba($color, 0.6) !important;
+    border: 2px solid rgba($color, 0.8) !important;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5), 0 0 5px rgba($color, 0.3);
+
+    // Au survol (le pad s'illumine)
+    &:hover {
+      background-color: rgba($color, 0.9) !important;
+      border-color: $color !important;
+      box-shadow: 0 0 15px $color, inset 0 0 10px rgba(255, 255, 255, 0.2);
+      transform: scale(1.05);
+    }
+
+    // Au clic (le pad flashe)
+    &:active {
+      background-color: color.adjust($color, $lightness: 15%) !important;
+      box-shadow: 0 0 25px $color, inset 0 0 15px rgba(255, 255, 255, 0.5);
+      transform: scale(0.95);
+    }
+  }
+}
+
+.pad-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+
+  .pad-icon {
+    font-size: 1.2rem;
+  }
+
+  .pad-name {
+    font-size: 0.6rem;
+    font-weight: bold;
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    word-break: break-all;
+    line-height: 1;
+  }
+}
