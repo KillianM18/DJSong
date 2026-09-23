@@ -84,7 +84,7 @@ $accent-color: $rose;
       gap: 1rem;
       flex: 2;
       min-width: 300px;
-      
+
       .search-input-wrapper {
         flex: 1;
         position: relative;
@@ -425,6 +425,8 @@ $accent-color: $rose;
   }
 
   @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+      transform: rotate(360deg);
+    }
   }
 }
