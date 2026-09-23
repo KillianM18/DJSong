@@ -2,14 +2,14 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 5vw;
+  padding: 2vw;
   height: 5vh;
 
-&__logo{
-  height: 100%;
-}
+  &__logo {
+    height: 100%;
+  }
 
-  &__profileLogo{
+  &__profileLogo {
     color: #a2ebf0;
     height: 5vh;
   }
