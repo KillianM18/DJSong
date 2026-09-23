@@ -305,7 +305,7 @@ export default function FloatingLines({
 
     let renderer;
     try {
-      renderer = new WebGLRenderer({ alpha: true });
+      renderer = new WebGLRenderer({ antialias: true, alpha: false });
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
       renderer.domElement.style.width = '100%';
       renderer.domElement.style.height = '100%';

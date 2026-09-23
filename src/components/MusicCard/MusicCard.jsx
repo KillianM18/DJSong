@@ -1,4 +1,4 @@
-import "./MusicCard.css";
+import "./MusicCard.scss";
 import { Link } from "react-router-dom";
 
 function MusicCard({ name }) {

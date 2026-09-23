@@ -1,8 +1,11 @@
+@use "../../style/abstract/shared" as *;
+
 .footer{
+    padding: 1vh 0 1vh 0;
+    @include flex(column, space-around, center);
     height: 5vh;
+    background-color: $blue;
+    align-items: center;
+    color: $black;
 
-
-    &__text{
-        margin-top: 5vh;
     }
-}
