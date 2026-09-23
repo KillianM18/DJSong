@@ -20,6 +20,8 @@
     justify-content: space-around;
     align-items: center;
     // background-color: blue;
+
+
     &__btn-container-play {
       margin: 1.5rem;
       height: 10vh;
@@ -33,5 +35,19 @@
         background-color: #db3069;
       }
     }
+  }
+      &__lastLine{
+      animation: appear 1s ease-in-out;
+    }
+}
+@keyframes appear{
+  from{
+    transform: translateY(100%);
+    opacity: 0;
+  }
+
+  to{
+    transform: translateY(0);
+    opacity: 1;
   }
 }

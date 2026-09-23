@@ -6,6 +6,7 @@ import { useState } from "react";
 function Playboard() {
   const [nbr_line, setLine] = useState(3);
   const [nbr_col, setCol] = useState(3);
+  const [isNewLine, setIsNewLine] = useState(false);
   // Limit the button's number on the playboard
   if (nbr_line > 6 || nbr_col > 6) {
     if (nbr_line > 6) {
@@ -33,14 +34,20 @@ function Playboard() {
       <div className="main__userChoice">
         <span>Lignes :</span>
         <button
-          onClick={() => setLine(nbr_line - 1)}
+          onClick={() => {
+            setLine(nbr_line - 1);
+            setIsNewLine(false);
+          }}
           className="main__userChoice__btn"
         >
           -
         </button>
         <span>{nbr_line}</span>
         <button
-          onClick={() => setLine(nbr_line + 1)}
+          onClick={() => {
+            setLine(nbr_line + 1);
+            setIsNewLine(true);
+          }}
           className="main__userChoice__btn"
         >
           +
@@ -62,7 +69,7 @@ function Playboard() {
         </button>
         <Link to="/playboard/parameters">Chercher un son</Link>
       </div>
-      <Board nb_col={nbr_col} nb_line={nbr_line} />
+      <Board nb_col={nbr_col} nb_line={nbr_line} isNewLine={isNewLine} />
     </div>
   );
 }
