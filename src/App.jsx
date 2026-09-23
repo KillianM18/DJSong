@@ -1,26 +1,39 @@
 import { useState } from 'react';
-import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate, Outlet } from "react-router-dom";
 import Connexion from './pages/Connexion/Connexion.jsx';
 import Home_connexion from './pages/Home_connexion/Home_connexion.jsx';
 import Inscription from './pages/Inscription/Inscription.jsx';
 import Profile from "./pages/Profile/Profile";
 import Playboard from "./pages/Playboard/Playboard";
 import PlayboardParam from "./pages/PlayboardParameters/PlayboardParam.jsx";
-import Temp from "./pages/Temp/Temp";
+import Header from "./layouts/Header/Header.jsx";
+
+function LayoutWithHeader() {
+  return (
+    <>
+      <Header />
+      <Outlet />
+    </>
+  );
+}
 
 function App() {
   return (
     <div className="app">
       <BrowserRouter>
         <Routes>
+          {/* --- Pages SANS Header --- */}
           <Route path="/" element={<Navigate to="/connexion" replace />} />
           <Route path="/connexion" element={<Connexion />} />
           <Route path="/home_connexion" element={<Home_connexion />} />
           <Route path="/inscription" element={<Inscription />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/playboard" element={<Playboard />} />
-          <Route path="/playboard/parameters" element={<PlayboardParam />} />
-          <Route path="/temp" element={<Temp />} />
+
+          {/* --- Pages AVEC Header --- */}
+          <Route element={<LayoutWithHeader />}>
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/playboard" element={<Playboard />} />
+            <Route path="/playboard/parameters" element={<PlayboardParam />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </div>
