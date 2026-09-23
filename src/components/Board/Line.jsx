@@ -1,10 +1,11 @@
 import Btn from "./Btn";
 import "./Board.scss";
 
-function Line({ nb_col, isLast, isNewColumn }) {
+function Line({ nb_col, isLast, isNewColumn, lineIndex }) {
   let line = [];
   for (let i = 0; i < nb_col; i++) {
-    line.push(<Btn key={i} isLast={i === nb_col - 1 ? isNewColumn : false} />);
+    const padIndex = lineIndex * nb_col + i;
+    line.push(<Btn key={i} padIndex={padIndex} isLast={i === nb_col - 1 ? isNewColumn : false} />);
   }
 
   return (

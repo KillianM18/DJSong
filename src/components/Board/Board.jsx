@@ -7,6 +7,7 @@ function Board({ nb_col, nb_line, isNewLine, isNewColumn }) {
     board.push(
       <Line
         key={i}
+        lineIndex={i}
         nb_col={nb_col}
         isLast={i === nb_line - 1 ? isNewLine : false}
         isNewColumn={isNewColumn}

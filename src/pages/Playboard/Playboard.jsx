@@ -1,14 +1,15 @@
 import "./Playboard.scss";
 import Board from "../../components/Board/Board";
 import { Link } from "react-router-dom";
+import Timeline from "../../components/Timeline/Timeline";
 
 import { useState } from "react";
+import { usePlayboard } from "../../context/PlayboardContext";
+
 function Playboard() {
-  const [nbr_line, setLine] = useState(3);
-  const [nbr_col, setCol] = useState(3);
+  const { nbr_line, setLine, nbr_col, setCol } = usePlayboard();
   const [isNewLine, setIsNewLine] = useState(false);
   const [isNewColumn, setIsNewColumn] = useState(false);
-  // Limit the button's number on the playboard
   if (nbr_line > 6 || nbr_col > 6) {
     if (nbr_line > 6) {
       setLine(6);
@@ -32,7 +33,7 @@ function Playboard() {
 
   return (
     <div className="main">
-      
+
       <div className="main__userChoice">
         <span>Lignes :</span>
         <button
@@ -83,6 +84,9 @@ function Playboard() {
         isNewLine={isNewLine}
         isNewColumn={isNewColumn}
       />
+
+      {/*Intégration de la Timeline*/}
+      <Timeline />
     </div>
   );
 }

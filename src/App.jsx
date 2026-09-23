@@ -6,11 +6,12 @@ import Inscription from './pages/Inscription/Inscription.jsx';
 import Profile from "./pages/Profile/Profile";
 import Playboard from "./pages/Playboard/Playboard";
 import PlayboardParam from "./pages/PlayboardParameters/PlayboardParam.jsx";
+import { PlayboardProvider } from "./context/PlayboardContext.jsx";
 import Header from "./layouts/Header/Header.jsx";
 import Footer from "./layouts/Footer/Footer.jsx";
 import FloatingLines from './components/FloatingLines/FloatingLines';
 
-// Ce layout affichera le Header et le Footer autour de vos pages principales
+// Ce layout affichera le Header et le Footer autour des pages principales
 function MainLayout() {
   return (
     <>
@@ -24,34 +25,36 @@ function MainLayout() {
 function App() {
   return (
     <div className="app">
-      <div style={{ position: "fixed", inset: 0, zIndex: -1 }}>
-        <FloatingLines
-          linesGradient={["#1265ec", "#A2EBF0", "#DB3069"]}
-          animationSpeed={2}
-          enabledWaves={["middle", "bottom", "top"]}
-          lineCount={5}
-          lineDistance={41.5}
-          interactive={false}
-          bendRadius={17}
-          bendStrength={-3}
-        />
-      </div>
-      <BrowserRouter>
-        <Routes>
-          {/* --- Pages SANS Header ni Footer --- */}
-          <Route path="/" element={<Navigate to="/connexion" replace />} />
-          <Route path="/connexion" element={<Connexion />} />
-          <Route path="/home_connexion" element={<Home_connexion />} />
-          <Route path="/inscription" element={<Inscription />} />
+      <PlayboardProvider>
+        <div style={{ position: "fixed", inset: 0, zIndex: -1 }}>
+          <FloatingLines
+            linesGradient={["#1265ec", "#A2EBF0", "#DB3069"]}
+            animationSpeed={2}
+            enabledWaves={["middle", "bottom", "top"]}
+            lineCount={5}
+            lineDistance={41.5}
+            interactive={false}
+            bendRadius={17}
+            bendStrength={-3}
+          />
+        </div>
+        <BrowserRouter>
+          <Routes>
+            {/* Pages SANS Header ni Footer */}
+            <Route path="/" element={<Navigate to="/home_connexion" replace />} />
+            <Route path="/connexion" element={<Connexion />} />
+            <Route path="/home_connexion" element={<Home_connexion />} />
+            <Route path="/inscription" element={<Inscription />} />
 
-          {/* --- Pages AVEC Header et Footer --- */}
-          <Route element={<MainLayout />}>
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/playboard" element={<Playboard />} />
-            <Route path="/playboard/parameters" element={<PlayboardParam />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+            {/* Pages AVEC Header et Footer */}
+            <Route element={<MainLayout />}>
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/playboard" element={<Playboard />} />
+              <Route path="/playboard/parameters" element={<PlayboardParam />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </PlayboardProvider>
     </div>
   )
 }

@@ -1,15 +1,7 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
-import {
-  Search,
-  Play,
-  Pause,
-  Plus,
-  Music2,
-  ArrowLeft,
-  ChevronLeft,
-  ChevronRight,
-  Filter,
-} from "lucide-react";
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Search, Play, Pause, Plus, Music2, ArrowLeft, ChevronLeft, ChevronRight, Filter } from 'lucide-react';
+import { usePlayboard } from '../../context/PlayboardContext';
+import { useNavigate } from 'react-router-dom';
 import "./PlayboardParam.scss";
 
 const API_KEY = "LvuTO0bluMYDQpYKGRPbqZidQKQUyaaFG0JTc5U1";
@@ -34,6 +26,24 @@ const DURATION_FILTERS = [
   { label: "Longues (> 5s)", value: "duration:[5.0 TO *]" },
 ];
 
+const detectSoundTag = (sound) => {
+  const name = (sound.name || "").toLowerCase();
+  const tags = (sound.tags || []).map(t => t.toLowerCase());
+
+  const searchIn = [name, ...tags];
+
+  if (searchIn.some(t => t.includes("drum") || t.includes("kick") || t.includes("snare") || t.includes("hihat") || t.includes("cymbal"))) return "drums";
+  if (searchIn.some(t => t.includes("bass") || t.includes("808"))) return "bass";
+  if (searchIn.some(t => t.includes("synth") || t.includes("pad") || t.includes("lead") || t.includes("chord"))) return "synth";
+  if (searchIn.some(t => t.includes("vocal") || t.includes("voice") || t.includes("sing") || t.includes("choir"))) return "vocals";
+  if (searchIn.some(t => t.includes("fx") || t.includes("effect") || t.includes("impact") || t.includes("sweep") || t.includes("riser"))) return "fx";
+  if (searchIn.some(t => t.includes("perc") || t.includes("conga") || t.includes("bongo") || t.includes("shaker"))) return "percussion";
+  if (searchIn.some(t => t.includes("ambient") || t.includes("drone") || t.includes("texture") || t.includes("atmosphere"))) return "ambient";
+  if (searchIn.some(t => t.includes("loop"))) return "loop";
+
+  return "ambient";
+};
+
 const Waveform = ({ sound, isPlaying, audioRef }) => {
   const [progress, setProgress] = useState(0);
   const animationRef = useRef(null);
@@ -46,7 +56,7 @@ const Waveform = ({ sound, isPlaying, audioRef }) => {
       if (isNaN(total) || total <= 0) {
         total = sound.duration;
       }
-      if (!total || total <= 0) total = 1; // Sécurité anti division par 0
+      if (!total || total <= 0) total = 1;
 
       const newProgress = Math.min((current / total) * 100, 100);
       setProgress(newProgress || 0);
@@ -90,13 +100,19 @@ const Waveform = ({ sound, isPlaying, audioRef }) => {
   );
 };
 
-export default function PlayboardParam({ onAddSound, onClose }) {
-  const [query, setQuery] = useState("");
-  const [activeCategory, setActiveCategory] = useState("Tous");
-  const [durationFilter, setDurationFilter] = useState("");
+export default function PlayboardParam() {
+  const navigate = useNavigate();
+  const { assignSoundToPad, deleteSoundFromPad, swapSounds, nbr_line, nbr_col, pads } = usePlayboard();
+
+  const [query, setQuery] = useState('');
+  const [activeCategory, setActiveCategory] = useState('Tous');
+  const [durationFilter, setDurationFilter] = useState('');
   const [results, setResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [playingId, setPlayingId] = useState(null);
+
+  const [selectedSoundForPad, setSelectedSoundForPad] = useState(null);
+  const [isManageModalOpen, setIsManageModalOpen] = useState(false);
 
   // Pagination
   const [page, setPage] = useState(1);
@@ -133,7 +149,6 @@ export default function PlayboardParam({ onAddSound, onClose }) {
     [durationFilter],
   );
 
-  // Handle Search input with 3 seconds debounce
   useEffect(() => {
     if (searchTimeoutRef.current) {
       clearTimeout(searchTimeoutRef.current);
@@ -150,7 +165,6 @@ export default function PlayboardParam({ onAddSound, onClose }) {
     };
   }, [query, activeCategory, fetchSounds]);
 
-  // Handle category selection
   useEffect(() => {
     if (activeCategory) {
       fetchSounds(activeCategory, 1);
@@ -158,15 +172,12 @@ export default function PlayboardParam({ onAddSound, onClose }) {
     }
   }, [activeCategory, durationFilter, fetchSounds]);
 
-  // Initial fetch on mount if 'Tous' is the active category
   useEffect(() => {
     if (activeCategory === "Tous") {
       fetchSounds("Tous", 1);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Manual search via Form submission (Enter key or click)
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
@@ -228,7 +239,6 @@ export default function PlayboardParam({ onAddSound, onClose }) {
     }
   };
 
-  // Stopper l'audio si on ferme le composant
   useEffect(() => {
     return () => {
       if (audioRef.current) {
@@ -337,7 +347,7 @@ export default function PlayboardParam({ onAddSound, onClose }) {
 
                         <button
                           className="save-button"
-                          onClick={() => onAddSound && onAddSound(sound)}
+                          onClick={() => setSelectedSoundForPad(sound)}
                           title="Assigner ce son au Launchpad"
                         >
                           <Plus size={20} />
@@ -377,6 +387,84 @@ export default function PlayboardParam({ onAddSound, onClose }) {
           </>
         )}
       </div>
+
+      {(selectedSoundForPad || isManageModalOpen) && (
+        <div className="pad-modal-overlay" onClick={() => { setSelectedSoundForPad(null); setIsManageModalOpen(false); }}>
+          <div className="pad-modal-content" onClick={e => e.stopPropagation()}>
+            <h2>{isManageModalOpen ? "Gérer vos pads" : "Choisir un pad pour ce son"}</h2>
+            <p>
+              {isManageModalOpen
+                ? "Glissez-déposez pour déplacer. Cliquez sur la croix pour supprimer."
+                : `"${selectedSoundForPad.name.substring(0, 30)}${selectedSoundForPad.name.length > 30 ? '...' : ''}"`
+              }
+            </p>
+
+            <div
+              className="pad-mini-board"
+              style={{
+                display: 'grid',
+                gridTemplateColumns: `repeat(${nbr_col}, 1fr)`,
+                gridTemplateRows: `repeat(${nbr_line}, 1fr)`,
+                gap: '10px',
+                margin: '20px auto',
+                width: '100%',
+                maxWidth: '300px',
+                aspectRatio: `${nbr_col} / ${nbr_line}`
+              }}
+            >
+              {Array(nbr_line * nbr_col).fill(null).map((_, i) => (
+                <div key={i} style={{ position: 'relative' }}>
+                  <button
+                    className={`mini-pad ${pads[i] ? 'occupied' : 'empty'} ${pads[i]?.customTag ? pads[i].customTag : ''}`}
+                    onClick={() => {
+                      if (selectedSoundForPad) {
+                        const soundWithTag = {
+                          ...selectedSoundForPad,
+                          customTag: detectSoundTag(selectedSoundForPad)
+                        };
+                        assignSoundToPad(soundWithTag, i);
+                        setSelectedSoundForPad(null);
+                      }
+                    }}
+                    title={pads[i] ? pads[i].name : `Pad vide ${i + 1}`}
+                    draggable={!!pads[i]}
+                    onDragStart={(e) => {
+                      e.dataTransfer.setData('sourceIndex', i);
+                    }}
+                    onDragOver={(e) => e.preventDefault()}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      const sourceIndex = parseInt(e.dataTransfer.getData('sourceIndex'), 10);
+                      if (!isNaN(sourceIndex) && sourceIndex !== i) {
+                        swapSounds(sourceIndex, i);
+                      }
+                    }}
+                    style={{ width: '100%', height: '100%' }}
+                  >
+                    {pads[i] ? "🎵" : "+"}
+                  </button>
+
+                  {/* Bouton de suppression en haut à droite */}
+                  {pads[i] && (
+                    <button
+                      className="delete-pad-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        deleteSoundFromPad(i);
+                      }}
+                      title="Supprimer ce son"
+                    >
+                      ×
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <button className="cancel-btn" onClick={() => { setSelectedSoundForPad(null); setIsManageModalOpen(false); }}>Fermer</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
