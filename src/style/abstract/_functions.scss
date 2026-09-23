@@ -1,0 +1,5 @@
+@use "./variables" as *;
+
+@function gap($size) {
+  @return map-get($gaps, $size);
+}

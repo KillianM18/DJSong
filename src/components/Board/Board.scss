@@ -3,16 +3,30 @@
 // 5A6A7C bleu gris
 // A2EBF0 bleu clair
 // DB3069 rose
+
+@use "../../style/abstract/variables" as *;
+
+$color-btn: (
+  "drums": blue,
+  "synth": red,
+  "bass": pink,
+  "vocals": purple,
+  "fx": green,
+  "percussion": rgb(248, 248, 67),
+  "ambient": orange,
+  "loop": cyan,
+);
+
 .playboard {
   height: auto;
   width: auto;
-  background: #fffffb;
+  background: $white;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 1rem;
   border-radius: 1rem;
-  border: 0.4rem solid #a2ebf0;
+  border: 0.4rem solid $blue;
   &__line {
     width: auto;
     height: auto;
@@ -24,15 +38,15 @@
 
     &__btn-container-play {
       margin: 1.5rem;
-      height: 10vh;
-      width: 10vh;
+      height: 6vh;
+      width: 6vh;
 
       border-radius: 0.2rem;
       border: none;
 
-      background: #5a6a7c;
+      background: $gray;
       &:hover {
-        background-color: #db3069;
+        background-color: $rose;
       }
 
       &--last{
@@ -44,26 +58,30 @@
       animation: Lineappear 1s ease-in-out;
     }
 }
-@keyframes Lineappear{
-  from{
+@keyframes Lineappear {
+  from {
     transform: translateY(100%);
     opacity: 0;
   }
-
-  to{
+  to {
     transform: translateY(0);
     opacity: 1;
   }
 }
 
-@keyframes Columnappear{
-  from{
+@keyframes Columnappear {
+  from {
     transform: translateX(100%);
     opacity: 0;
   }
-
-  to{
+  to {
     transform: translateX(0);
     opacity: 1;
+  }
+}
+
+@each $tag, $color in $color-btn {
+  .#{$tag} {
+    background: $color;
   }
 }

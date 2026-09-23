@@ -3,6 +3,7 @@ import './Inscription.scss';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import MusicHoverButton from '../../components/MusicHoverButton/MusicHoverButton';
+import Banner from '../../components/Banner/Banner';
 
 function Inscription() {
     const [email, setEmail] = useState('');
@@ -18,11 +19,7 @@ function Inscription() {
 
   return (
     <div className="Inscription">
-        <div className="left">
-            <div className="logo">
-                <img src="https://cdn.discordapp.com/attachments/1129050911681876042/1130591558829824060/logo.png" alt="Logo" />
-            </div>
-        </div>
+        <Banner />
         <div className="right">
             <h1>Inscription</h1>
             <p>Bienvenue sur notre page d'inscription!</p>
