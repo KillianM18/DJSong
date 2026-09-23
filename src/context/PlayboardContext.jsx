@@ -7,6 +7,10 @@ export const usePlayboard = () => useContext(PlayboardContext);
 export const PlayboardProvider = ({ children }) => {
   // --- ÉTAT DES PADS (max 36 pour du 6x6) ---
   const [pads, setPads] = useState(Array(36).fill(null));
+  
+  // --- ÉTAT DE LA GRILLE ---
+  const [nbr_line, setLine] = useState(3);
+  const [nbr_col, setCol] = useState(3);
 
   // --- ÉTAT DE LA TIMELINE ---
   // Un événement : { id: string, padIndex: number, sound: object, startTime: number (secondes) }
@@ -25,16 +29,32 @@ export const PlayboardProvider = ({ children }) => {
   const lastPlayedEventIndicesRef = useRef(new Set()); // Pour ne pas rejouer le même événement
 
   // --- ACTIONS DES PADS ---
-  const assignSoundToPad = (sound) => {
-    // Trouve le premier pad vide
-    const emptyIndex = pads.findIndex(p => p === null);
-    if (emptyIndex !== -1) {
+  const assignSoundToPad = (sound, padIndex) => {
+    if (padIndex >= 0 && padIndex < pads.length) {
       const newPads = [...pads];
-      newPads[emptyIndex] = sound;
+      newPads[padIndex] = sound;
       setPads(newPads);
       return true; // Succès
     }
-    return false; // Plus de place
+    return false; // Index invalide
+  };
+
+  const deleteSoundFromPad = (padIndex) => {
+    if (padIndex >= 0 && padIndex < pads.length) {
+      const newPads = [...pads];
+      newPads[padIndex] = null;
+      setPads(newPads);
+    }
+  };
+
+  const swapSounds = (index1, index2) => {
+    if (index1 >= 0 && index2 >= 0 && index1 < pads.length && index2 < pads.length) {
+      const newPads = [...pads];
+      const temp = newPads[index1];
+      newPads[index1] = newPads[index2];
+      newPads[index2] = temp;
+      setPads(newPads);
+    }
   };
 
   const playSound = (previewUrl) => {
@@ -236,6 +256,8 @@ export const PlayboardProvider = ({ children }) => {
   const value = {
     pads,
     assignSoundToPad,
+    deleteSoundFromPad,
+    swapSounds,
     handlePadClick,
     events,
     isRecording,
@@ -249,7 +271,11 @@ export const PlayboardProvider = ({ children }) => {
     setCurrentTime,
     updateEventPosition,
     deleteEvent,
-    clearTimeline
+    clearTimeline,
+    nbr_line,
+    setLine,
+    nbr_col,
+    setCol
   };
 
   return (

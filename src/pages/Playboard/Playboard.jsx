@@ -4,9 +4,10 @@ import { Link } from "react-router-dom";
 import Timeline from "../../components/Timeline/Timeline";
 
 import { useState } from "react";
+import { usePlayboard } from "../../context/PlayboardContext";
+
 function Playboard() {
-  const [nbr_line, setLine] = useState(3);
-  const [nbr_col, setCol] = useState(3);
+  const { nbr_line, setLine, nbr_col, setCol } = usePlayboard();
   const [isNewLine, setIsNewLine] = useState(false);
   const [isNewColumn, setIsNewColumn] = useState(false);
   // Limit the button's number on the playboard
