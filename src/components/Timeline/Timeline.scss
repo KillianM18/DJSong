@@ -1,0 +1,224 @@
+@use "../../style/abstract/variables" as *;
+
+.timeline-container {
+  margin-top: 2rem;
+  background-color: $black;
+  border: 1px solid $gray;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 900px;
+}
+
+.timeline-controls {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  background-color: #3a414e; // lightening $black
+  border-bottom: 1px solid $gray;
+  gap: 1rem;
+
+  .control-btn {
+    background: transparent;
+    border: 1px solid $gray;
+    color: $white;
+    width: 40px;
+    height: 40px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      background-color: $blue;
+      color: $black;
+    }
+
+    &.recording {
+      color: red;
+      border-color: red;
+      animation: pulse 1.5s infinite;
+    }
+
+    &.playing {
+      color: $rose;
+      border-color: $rose;
+    }
+
+    &.delete {
+      margin-left: auto;
+      &:hover {
+        background-color: red;
+        color: white;
+      }
+    }
+  }
+
+  .time-display {
+    color: $white;
+    font-family: monospace;
+    font-size: 1.2rem;
+    margin-left: 1rem;
+  }
+}
+
+.timeline-tracks-container {
+  display: flex;
+  position: relative;
+  overflow-x: auto;
+  overflow-y: hidden;
+  background-color: $black;
+  min-height: 200px;
+
+  /* Style de la barre de défilement */
+  &::-webkit-scrollbar {
+    height: 10px;
+  }
+  &::-webkit-scrollbar-track {
+    background: $black;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: $gray;
+    border-radius: 4px;
+    &:hover {
+      background: #718398;
+    }
+  }
+
+  .tracks-headers {
+    flex-shrink: 0;
+    width: 150px;
+    background-color: #3a414e; // lightening $black
+    border-right: 1px solid $gray;
+    position: sticky;
+    left: 0;
+    z-index: 10;
+
+    .track-header {
+      height: 60px;
+      display: flex;
+      align-items: center;
+      padding: 0 1rem;
+      border-bottom: 1px solid $gray;
+      color: $white;
+      font-size: 0.9rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .tracks-body {
+    position: relative;
+    flex-grow: 1;
+    min-width: 1000px; /* 10s * 100px */
+    cursor: crosshair;
+
+    .playhead {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background-color: red;
+      z-index: 5;
+      pointer-events: none;
+      
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -4px;
+        width: 10px;
+        height: 10px;
+        background-color: red;
+        border-radius: 50%;
+      }
+    }
+
+    .track-row {
+      height: 60px;
+      position: relative;
+      border-bottom: 1px solid $gray;
+      background-color: $black;
+
+      .time-marker {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 1px;
+        background-color: rgba(255, 255, 255, 0.1);
+        pointer-events: none;
+      }
+
+      .timeline-event {
+        position: absolute;
+        top: 10px;
+        height: 40px;
+        background-color: $blue;
+        color: $black;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        padding: 0 0.5rem;
+        cursor: grab;
+        user-select: none;
+        overflow: hidden;
+        border: 1px solid $white;
+        z-index: 2;
+        transition: background-color 0.2s;
+
+        &:hover {
+          background-color: $rose;
+          .delete-event-btn {
+            opacity: 1;
+          }
+        }
+
+        &.dragging {
+          opacity: 0.8;
+          cursor: grabbing;
+          z-index: 10;
+        }
+
+        .event-label {
+          font-size: 0.8rem;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          pointer-events: none;
+        }
+
+        .delete-event-btn {
+          position: absolute;
+          right: 5px;
+          background: rgba(0,0,0,0.5);
+          color: white;
+          border: none;
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          opacity: 0;
+          transition: opacity 0.2s;
+
+          &:hover {
+            background: red;
+          }
+        }
+      }
+    }
+  }
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}

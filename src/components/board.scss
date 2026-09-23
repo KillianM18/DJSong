@@ -32,8 +32,28 @@
       border: none;
 
       background: $gray;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: all 0.2s;
+
       &:hover {
         background-color: $rose;
+      }
+
+      &.has-sound {
+        background-color: $blue;
+        border: 2px solid $white;
+
+        &:hover {
+          background-color: $rose;
+          transform: scale(1.05);
+        }
+      }
+
+      .pad-icon {
+        font-size: 2rem;
+        pointer-events: none;
       }
     }
   }

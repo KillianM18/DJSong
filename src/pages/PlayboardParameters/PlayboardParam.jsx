@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Search, Play, Pause, Plus, Music2, ArrowLeft, ChevronLeft, ChevronRight, Filter } from 'lucide-react';
+import { usePlayboard } from '../../context/PlayboardContext';
+import { useNavigate } from 'react-router-dom';
 import "./PlayboardParam.scss";
 
 const API_KEY = 'LvuTO0bluMYDQpYKGRPbqZidQKQUyaaFG0JTc5U1';
@@ -72,7 +74,10 @@ const Waveform = ({ sound, isPlaying, audioRef }) => {
   );
 };
 
-export default function PlayboardParam({ onAddSound, onClose }) {
+export default function PlayboardParam() {
+  const navigate = useNavigate();
+  const { assignSoundToPad } = usePlayboard();
+  
   const [query, setQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState('Tous');
   const [durationFilter, setDurationFilter] = useState('');
@@ -219,7 +224,7 @@ export default function PlayboardParam({ onAddSound, onClose }) {
     <div className="playboard-param-container">
       <div className="playboard-param-content">
 
-        <button className="back-btn" onClick={onClose}>
+        <button className="back-btn" onClick={() => navigate('/playboard')}>
           <ArrowLeft size={20} /> Retour au Launchpad
         </button>
 
@@ -308,7 +313,14 @@ export default function PlayboardParam({ onAddSound, onClose }) {
 
                         <button
                           className="save-button"
-                          onClick={() => onAddSound && onAddSound(sound)}
+                          onClick={() => {
+                            const success = assignSoundToPad(sound);
+                            if (success) {
+                              alert("Son assigné au Playboard !");
+                            } else {
+                              alert("Plus de place sur le Playboard !");
+                            }
+                          }}
                           title="Assigner ce son au Launchpad"
                         >
                           <Plus size={20} />

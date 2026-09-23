@@ -1,6 +1,7 @@
 import "./Playboard.scss";
 import Board from "../../components/Board";
 import { Link } from "react-router-dom";
+import Timeline from "../../components/Timeline/Timeline";
 
 import { useState } from "react";
 function Playboard() {
@@ -63,6 +64,9 @@ function Playboard() {
         <Link to="/playboard/parameters" className="main__userChoice__link">Chercher un son</Link>
       </div>
       <Board nb_col={nbr_col} nb_line={nbr_line} />
+      
+      {/* Intégration de la Timeline */}
+      <Timeline />
     </div>
   );
 }
