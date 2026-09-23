@@ -4,6 +4,7 @@ import './Connexion.scss';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import MusicHoverButton from '../../components/MusicHoverButton/MusicHoverButton';
+import Banner from '../../components/Banner/Banner';
 
 function Connexion() {
     const [email, setEmail] = useState('');
@@ -18,11 +19,8 @@ function Connexion() {
     };
     return (
         <div className="Connexion">
-            <div className="left">
-                <div className="logo">
-                    <img src="https://cdn.discordapp.com/attachments/1129050911681876042/1130591558829824060/logo.png" alt="Logo" />
-                </div>
-            </div>
+            
+            <Banner />
             <div className="right">
                 <h1>Connexion</h1>
                 <div className="form-container">
