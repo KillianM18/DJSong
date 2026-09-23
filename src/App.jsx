@@ -6,7 +6,7 @@ import Inscription from './pages/Inscription/Inscription.jsx';
 import Profile from "./pages/Profile/Profile";
 import Playboard from "./pages/Playboard/Playboard";
 import PlayboardParam from "./pages/PlayboardParameters/PlayboardParam.jsx";
-import "./App.scss";
+
 
 
 function App() {
