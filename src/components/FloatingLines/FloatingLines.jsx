@@ -303,11 +303,17 @@ export default function FloatingLines({
     const camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
     camera.position.z = 1;
 
-    const renderer = new WebGLRenderer({ antialias: true, alpha: false });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-    renderer.domElement.style.width = '100%';
-    renderer.domElement.style.height = '100%';
-    container.appendChild(renderer.domElement);
+    let renderer;
+    try {
+      renderer = new WebGLRenderer({ alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.domElement.style.width = '100%';
+      renderer.domElement.style.height = '100%';
+      container.appendChild(renderer.domElement);
+    } catch (e) {
+      console.warn("WebGL is not supported or failed to initialize:", e);
+      return;
+    }
 
     const uniforms = {
       iTime: { value: 0 },

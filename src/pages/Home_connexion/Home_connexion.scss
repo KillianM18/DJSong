@@ -1,8 +1,4 @@
-$white: #FFFFFB;
-$black: #313742 ;
-$gray: #5A6A7C;
-$blue: #A2EBF0;
-$rose: #DB3069;
+@use "../../style/abstract/variables" as *;
 
 
 .Home_connexion {

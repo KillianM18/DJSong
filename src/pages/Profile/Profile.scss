@@ -1,17 +1,20 @@
+@use "../../style/abstract/variables" as *;
+
 .profile{
+
     margin:5vw;
 
 &__profileLogo{
     width: 10vw;
-    color: #A2EBF0;
+    color: $blue;
 }
 
     &__title{
-        color:#FFFFFB
+        color: $white;
     }
 
     &__lastMusicsTitle{
-        color: #A2EBF0;
+        color: $blue;
     }
 
     &__musicsGrid{
