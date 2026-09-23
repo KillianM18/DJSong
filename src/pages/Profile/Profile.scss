@@ -3,11 +3,28 @@
 .profile{
 
     margin:5vw;
+    // height: 80vh;
 
-&__profileLogo{
-    width: 10vw;
-    color: $blue;
-}
+    &__header{
+        @include flex(
+            $direction: column,
+            $align: center,
+            $justify: flex-end,
+            $gap: gap("lg")
+        );
+
+        margin-bottom: 5vh;
+    }
+
+    &__profileLogo{
+        width: 10vw;
+        color: $blue;
+        background: rgba($white, 0.2);
+        border: 1px solid rgba($blue, 0.1);
+        border-radius: 50%;
+        backdrop-filter: blur(10px);
+        padding: 1.5rem;
+    }
 
     &__title{
         color: $white;
