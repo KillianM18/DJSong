@@ -10,12 +10,9 @@
   width: 100%;
   min-height: 100vh;
   position: relative;
+  flex: 1;
 
-  @include flex(
-    $direction: column,
-    $align: center,
-    $justify: space-evenly
-  );
+  @include flex($direction: column, $align: center, $justify: space-evenly);
   &__userChoice {
     margin-top: 2rem;
     color: $white;
@@ -24,19 +21,13 @@
     top: 0;
     left: 50%;
     transform: translateX(-50%);
-    @include flex(
-      $align: center,
-      $justify: space-around
-    );
+    @include flex($align: center, $justify: space-around);
 
     &__btn {
       box-sizing: border-box;
       width: 1.5rem;
       aspect-ratio: 1/1;
-      @include flex(
-        $align: center,
-        $justify: center
-      );
+      @include flex($align: center, $justify: center);
       background-color: $blue;
       color: $black;
       font-size: larger;
