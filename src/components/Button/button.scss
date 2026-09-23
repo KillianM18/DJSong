@@ -1,0 +1,16 @@
+@use "../../style/abstract/variables" as *;
+
+.button:not(.music-hover-btn){
+                text-decoration: none;
+                background-color: $black;
+                color: $white;
+                font-size: 20px;
+                padding: 10px 20px;
+                border: 1px solid $white;
+                border-radius: 20px;
+                transition: all 0.3s ease-in-out;
+                &:hover{
+                    background-color: $rose;
+                    color: $white;
+                }
+            };
