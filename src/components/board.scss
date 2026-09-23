@@ -34,13 +34,17 @@
       &:hover {
         background-color: #db3069;
       }
+
+      &--last{
+        animation: Columnappear 1s ease-in-out;
+      }
     }
   }
       &__lastLine{
-      animation: appear 1s ease-in-out;
+      animation: Lineappear 1s ease-in-out;
     }
 }
-@keyframes appear{
+@keyframes Lineappear{
   from{
     transform: translateY(100%);
     opacity: 0;
@@ -48,6 +52,18 @@
 
   to{
     transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes Columnappear{
+  from{
+    transform: translateX(100%);
+    opacity: 0;
+  }
+
+  to{
+    transform: translateX(0);
     opacity: 1;
   }
 }

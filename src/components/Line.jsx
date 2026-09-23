@@ -1,10 +1,14 @@
 import Btn from "./Btn";
 import "./board.scss";
 
-function Line({ nb_col, isLast }) {
+function Line({ nb_col, isLast, isNewColumn }) {
   let line = [];
   for (let i = 0; i < nb_col; i++) {
-    line.push(<Btn />);
+    i == nb_col - 1
+      ? isNewColumn
+        ? line.push(<Btn isLast={true} />)
+        : line.push(<Btn isLast={false} />)
+      : line.push(<Btn isLast={false} />);
   }
 
   return (

@@ -7,6 +7,7 @@ function Playboard() {
   const [nbr_line, setLine] = useState(3);
   const [nbr_col, setCol] = useState(3);
   const [isNewLine, setIsNewLine] = useState(false);
+  const [isNewColumn, setIsNewColumn] = useState(false);
   // Limit the button's number on the playboard
   if (nbr_line > 6 || nbr_col > 6) {
     if (nbr_line > 6) {
@@ -55,21 +56,32 @@ function Playboard() {
 
         <span>Colonnes :</span>
         <button
-          onClick={() => setCol(nbr_col - 1)}
+          onClick={() => {
+            setCol(nbr_col - 1);
+            setIsNewColumn(false);
+          }}
           className="main__userChoice__btn"
         >
           -
         </button>
         <span>{nbr_col}</span>
         <button
-          onClick={() => setCol(nbr_col + 1)}
+          onClick={() => {
+            setCol(nbr_col + 1);
+            setIsNewColumn(true);
+          }}
           className="main__userChoice__btn"
         >
           +
         </button>
         <Link to="/playboard/parameters">Chercher un son</Link>
       </div>
-      <Board nb_col={nbr_col} nb_line={nbr_line} isNewLine={isNewLine} />
+      <Board
+        nb_col={nbr_col}
+        nb_line={nbr_line}
+        isNewLine={isNewLine}
+        isNewColumn={isNewColumn}
+      />
     </div>
   );
 }
