@@ -3,10 +3,13 @@
 // 5A6A7C bleu gris
 // A2EBF0 bleu clair
 // DB3069 rose
+
+@use "../../style/abstract/variables" as *;
+
 .main {
   width: 100%;
   min-height: 100vh;
-  background-color: #313742;
+  background-color: $black;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -20,7 +23,7 @@
     transform: translateX(-50%);
     display: flex;
     justify-content: space-around;
-    color: #fffffb;
+    color: $white;
     &__btn {
       box-sizing: border-box;
       width: 1.5rem;
@@ -29,11 +32,35 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      background-color: #a2ebf0;
-      color: #313742;
+      background-color: $blue;
+      color: $black;
       font-size: larger;
       border: none;
       border-radius: 0.2rem;
+    }
+
+    &__link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      background-color: $black;
+      color: $white;
+      padding: 0.6rem 1.2rem;
+      border: 1px solid $white;
+      border-radius: 20px;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      margin-left: 1rem;
+
+      &:hover {
+        background-color: $rose;
+      }
+
+      &:active {
+        transform: scale(0.95);
+      }
     }
   }
 }
