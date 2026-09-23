@@ -1,0 +1,19 @@
+@use "../../style/abstract/shared" as *;
+
+
+.import-export-button{
+    @include flex(
+        $direction: row,
+        $align: center,
+        $justify: space-around,
+    );
+
+    .download, .upload{
+        @include flex(
+            $direction: column,
+            $align: center,
+            $justify: center,
+            $gap: gap("md")
+        );
+    }
+}
