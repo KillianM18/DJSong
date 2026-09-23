@@ -41,7 +41,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             {/* --- Pages SANS Header ni Footer --- */}
-            <Route path="/" element={<Navigate to="/connexion" replace />} />
+            <Route path="/" element={<Navigate to="/home_connexion" replace />} />
             <Route path="/connexion" element={<Connexion />} />
             <Route path="/home_connexion" element={<Home_connexion />} />
             <Route path="/inscription" element={<Inscription />} />
