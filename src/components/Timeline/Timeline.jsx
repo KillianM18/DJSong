@@ -23,10 +23,28 @@ export default function Timeline() {
   const timelineRef = useRef(null);
   const [draggingId, setDraggingId] = useState(null);
 
-  // Déterminer le nombre de pistes
+  // Simulation de l'abonnement utilisateur (à relier plus tard au vrai système d'auth)
+  // Valeurs possibles : 'gratuit', 'or', 'platine', 'diamant'
+  const userSubscription = 'gratuit';
+
+  // Déterminer la limite de pistes selon l'abonnement
+  const getTrackLimit = (sub) => {
+    switch(sub) {
+      case 'gratuit': return 2;
+      case 'or': return 3;
+      case 'platine': return 4;
+      case 'diamant': return Infinity;
+      default: return 2;
+    }
+  };
+
+  const trackLimit = getTrackLimit(userSubscription);
   const maxTrackIndex = events.length > 0 ? Math.max(...events.map(ev => ev.trackIndex)) : -1;
-  const tracksCount = Math.max(3, maxTrackIndex + 1);
-  const tracks = Array.from({ length: tracksCount }).map((_, i) => i);
+  
+  // S'il n'y a pas de limite, on affiche au moins 4 pistes, ou plus si des événements sont plus bas.
+  // S'il y a une limite, on affiche exactement ce nombre de pistes.
+  const displayTracksCount = trackLimit === Infinity ? Math.max(4, maxTrackIndex + 1) : trackLimit;
+  const tracks = Array.from({ length: displayTracksCount }).map((_, i) => i);
 
   const pixelsPerSecond = 100; // 1 seconde = 100px
 
@@ -84,8 +102,11 @@ export default function Timeline() {
     const y = e.clientY - rect.top + timelineRef.current.scrollTop;
     let newTrackIndex = Math.floor(y / 60);
     if (newTrackIndex < 0) newTrackIndex = 0;
-    // Permet de glisser vers le bas pour créer une nouvelle piste
-    if (newTrackIndex > tracksCount) newTrackIndex = tracksCount;
+    
+    // Limitation selon l'abonnement
+    if (newTrackIndex >= displayTracksCount) {
+      newTrackIndex = displayTracksCount - 1;
+    }
     
     updateEventPosition(draggingId, newTime, newTrackIndex);
   };

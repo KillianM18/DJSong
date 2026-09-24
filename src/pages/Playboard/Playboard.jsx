@@ -3,17 +3,18 @@ import "../PlayboardParameters/PlayboardParam.scss";
 import { Link } from "react-router-dom";
 import Timeline from "../../components/Timeline/Timeline";
 import ImportExportButton from "../../components/ImportExportButton/ImportExportButton";
-
 import { useState } from "react";
 import Board from "../../components/Board/Board";
 import MusicHoverButton from "../../components/MusicHoverButton/MusicHoverButton";
 import { usePlayboard } from "../../context/PlayboardContext";
-import { Import, Keyboard, Square } from "lucide-react";
+import { Import, Keyboard, Square, Maximize2, Minimize2 } from "lucide-react";
 
 function Playboard() {
   const { nbr_line, setLine, nbr_col, setCol, stopAllSounds, isConfiguringKeys, setIsConfiguringKeys, keyConfigPopup, setKeyConfigPopup, pads, padKeys, setPadKeys, isAnyPadSoundPlaying } = usePlayboard();
   const [isNewLine, setIsNewLine] = useState(false);
   const [isNewColumn, setIsNewColumn] = useState(false);
+  const [isTimelineExpanded, setIsTimelineExpanded] = useState(false);
+
   if (nbr_line > 6 || nbr_col > 6) {
     if (nbr_line > 6) {
       setLine(6);
@@ -37,90 +38,117 @@ function Playboard() {
 
   return (
     <div className="main">
-      <div className="main__userChoice">
-        <span>Lignes :</span>
-        <button
-          onClick={() => {
-            setLine(nbr_line - 1);
-            setIsNewLine(false);
-          }}
-          className="main__userChoice__btn"
-        >
-          -
-        </button>
-        <span>{nbr_line}</span>
-        <button
-          onClick={() => {
-            setLine(nbr_line + 1);
-            setIsNewLine(true);
-          }}
-          className="main__userChoice__btn"
-        >
-          +
-        </button>
+      <div className={`main__layout ${isTimelineExpanded ? 'timeline-expanded' : ''}`}>
+        
+        {/* COLONNE GAUCHE : Board et Contrôles */}
+        <div className="main__left">
+          <Board
+            nb_col={nbr_col}
+            nb_line={nbr_line}
+            isNewLine={isNewLine}
+            isNewColumn={isNewColumn}
+          />
+          <div className="main__controls">
+            <div className="control-row">
+              <div className="control-group">
+                <span>Lignes :</span>
+                <button
+                  onClick={() => {
+                    setLine(nbr_line - 1);
+                    setIsNewLine(false);
+                  }}
+                  className="main__userChoice__btn"
+                >
+                  -
+                </button>
+                <span>{nbr_line}</span>
+                <button
+                  onClick={() => {
+                    setLine(nbr_line + 1);
+                    setIsNewLine(true);
+                  }}
+                  className="main__userChoice__btn"
+                >
+                  +
+                </button>
+              </div>
 
-        <span>Colonnes :</span>
-        <button
-          onClick={() => {
-            setCol(nbr_col - 1);
-            setIsNewColumn(false);
-          }}
-          className="main__userChoice__btn"
-        >
-          -
-        </button>
-        <span>{nbr_col}</span>
-        <button
-          onClick={() => {
-            setCol(nbr_col + 1);
-            setIsNewColumn(true);
-          }}
-          className="main__userChoice__btn"
-        >
-          +
-        </button>
-        <button
-          className={`main__userChoice__link ${isConfiguringKeys ? 'active-config' : ''}`}
-          onClick={() => setIsConfiguringKeys(!isConfiguringKeys)}
-          style={{ background: isConfiguringKeys ? '#ff4757' : '', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
-          title="Assigner des touches du clavier aux pads"
-        >
-          <Keyboard size={18} />
-          {isConfiguringKeys ? 'Configuration...' : 'Raccourcis'}
-        </button>
+              <div className="control-group">
+                <span>Colonnes :</span>
+                <button
+                  onClick={() => {
+                    setCol(nbr_col - 1);
+                    setIsNewColumn(false);
+                  }}
+                  className="main__userChoice__btn"
+                >
+                  -
+                </button>
+                <span>{nbr_col}</span>
+                <button
+                  onClick={() => {
+                    setCol(nbr_col + 1);
+                    setIsNewColumn(true);
+                  }}
+                  className="main__userChoice__btn"
+                >
+                  +
+                </button>
+              </div>
+            </div>
 
-        <button
-          className="main__userChoice__link"
-          onClick={stopAllSounds}
-          disabled={!isAnyPadSoundPlaying}
-          style={{ 
-            background: isAnyPadSoundPlaying ? '#ff4757' : 'rgba(255, 71, 87, 0.3)', 
-            cursor: isAnyPadSoundPlaying ? 'pointer' : 'not-allowed',
-            opacity: isAnyPadSoundPlaying ? 1 : 0.5,
-            display: 'flex', alignItems: 'center', gap: '0.5rem' 
-          }}
-          title="Arrêter TOUS les sons"
-        >
-          <Square size={18} />
-          Stop All
-        </button>
+            <div className="control-group-buttons">
+              <button
+                className={`main__userChoice__link ${isConfiguringKeys ? 'active-config' : ''}`}
+                onClick={() => setIsConfiguringKeys(!isConfiguringKeys)}
+                style={{ background: isConfiguringKeys ? '#ff4757' : '', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+                title="Assigner des touches du clavier aux pads"
+              >
+                <Keyboard size={18} />
+                {isConfiguringKeys ? 'Configuration...' : 'Raccourcis'}
+              </button>
 
-        <MusicHoverButton
-          label="Chercher un son"
-          to="/playboard/parameters"
-          className="main__userChoice__link"
-        />
+              <button
+                className="main__userChoice__link"
+                onClick={stopAllSounds}
+                disabled={!isAnyPadSoundPlaying}
+                style={{ 
+                  background: isAnyPadSoundPlaying ? '#ff4757' : 'rgba(255, 71, 87, 0.3)', 
+                  cursor: isAnyPadSoundPlaying ? 'pointer' : 'not-allowed',
+                  opacity: isAnyPadSoundPlaying ? 1 : 0.5,
+                  display: 'flex', alignItems: 'center', gap: '0.5rem' 
+                }}
+                title="Arrêter TOUS les sons"
+              >
+                <Square size={18} />
+                Stop All
+              </button>
+
+              <MusicHoverButton
+                label="Chercher un son"
+                to="/playboard/parameters"
+                className="main__userChoice__link"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* COLONNE DROITE : Timeline et Export */}
+        <div className="main__right">
+          <div className="timeline-header">
+            <h3>Séquenceur</h3>
+            <button 
+              className="expand-timeline-btn" 
+              onClick={() => setIsTimelineExpanded(!isTimelineExpanded)}
+              title={isTimelineExpanded ? "Réduire" : "Plein écran"}
+            >
+              {isTimelineExpanded ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
+            </button>
+          </div>
+          <Timeline />
+          <ImportExportButton />
+        </div>
       </div>
-      <Board
-        nb_col={nbr_col}
-        nb_line={nbr_line}
-        isNewLine={isNewLine}
-        isNewColumn={isNewColumn}
-      />
-
-      {/*Intégration de la Timeline*/}
-      <Timeline />
-      <ImportExportButton />
 
       {/* Pop-up pour assigner une touche (façon mini-board) */}
       {isConfiguringKeys && (
