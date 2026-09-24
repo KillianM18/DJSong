@@ -300,6 +300,26 @@ export const PlayboardProvider = ({ children }) => {
     setCurrentTime(0);
   };
 
+  const loadProject = (projectData) => {
+    if (projectData.pads) setPads(projectData.pads);
+    if (projectData.events) setEvents(projectData.events);
+    if (projectData.nbr_line) setLine(projectData.nbr_line);
+    if (projectData.nbr_col) setCol(projectData.nbr_col);
+    if (projectData.timelineDuration) setTimelineDuration(projectData.timelineDuration);
+    
+    // Réinitialisation du lecteur
+    setCurrentTime(0);
+    setIsPlaying(false);
+    setIsRecording(false);
+    lastPlayedEventIndicesRef.current.clear();
+    cancelAnimationFrame(timerRef.current);
+    playingAudiosRef.current.forEach(audio => {
+      audio.pause();
+      audio.currentTime = 0;
+    });
+    playingAudiosRef.current = [];
+  };
+
   const value = {
     pads,
     assignSoundToPad,
@@ -320,6 +340,7 @@ export const PlayboardProvider = ({ children }) => {
     updateEventPosition,
     deleteEvent,
     clearTimeline,
+    loadProject,
     nbr_line,
     setLine,
     nbr_col,

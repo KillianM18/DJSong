@@ -2,9 +2,11 @@ import "./Playboard.scss";
 import Board from "../../components/Board/Board";
 import { Link } from "react-router-dom";
 import Timeline from "../../components/Timeline/Timeline";
+import ImportExportButton from "../../components/ImportExportButton/ImportExportButton";
 
 import { useState } from "react";
 import { usePlayboard } from "../../context/PlayboardContext";
+import { Import } from "lucide-react";
 
 function Playboard() {
   const { nbr_line, setLine, nbr_col, setCol } = usePlayboard();
@@ -87,6 +89,7 @@ function Playboard() {
 
       {/*Intégration de la Timeline*/}
       <Timeline />
+      <ImportExportButton />
     </div>
   );
 }
