@@ -10,7 +10,7 @@
   width: 100%;
   min-height: 100vh;
   position: relative;
-  flex: 1;
+  // flex: 1;
 
   @include flex($direction: column, $align: center, $justify: space-evenly);
   &__userChoice {
@@ -22,14 +22,16 @@
     left: 50%;
     transform: translateX(-50%);
     @include flex($align: center, $justify: space-around);
+    font-size: larger;
 
     &__btn {
       box-sizing: border-box;
-      width: 1.5rem;
+      width: 2rem;
       aspect-ratio: 1/1;
       @include flex($align: center, $justify: center);
-      background-color: $blue;
-      color: $black;
+      background: rgba($blue, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: $white;
       font-size: larger;
       border: none;
       border-radius: 0.2rem;
@@ -51,7 +53,9 @@
       margin-left: 1rem;
 
       &:hover {
-        background-color: $rose;
+        background: rgba($rose, 0.4);
+        border-color: $rose;
+        box-shadow: 0 4px 15px rgba($rose, 0.4);
       }
 
       &:active {
@@ -60,3 +64,4 @@
     }
   }
 }
+// flex: 1;
