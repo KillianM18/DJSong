@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes, Navigate, Outlet } from "react-router-dom
 import Connexion from './pages/Connexion/Connexion.jsx';
 import Home_connexion from './pages/Home_connexion/Home_connexion.jsx';
 import Inscription from './pages/Inscription/Inscription.jsx';
+import Subscription from './pages/Subscription/Subscription.jsx';
 import Profile from "./pages/Profile/Profile";
 import Playboard from "./pages/Playboard/Playboard";
 import PlayboardParam from "./pages/PlayboardParameters/PlayboardParam.jsx";
@@ -51,6 +52,7 @@ function App() {
               <Route path="/profile" element={<Profile />} />
               <Route path="/playboard" element={<Playboard />} />
               <Route path="/playboard/parameters" element={<PlayboardParam />} />
+              <Route path="/subscription" element={<Subscription />} />
             </Route>
           </Routes>
         </BrowserRouter>

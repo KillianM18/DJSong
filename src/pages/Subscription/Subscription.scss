@@ -1,0 +1,11 @@
+@use "../../style/abstract/shared" as *;
+
+
+.Abonnement{
+    @include flex(
+        $direction: column,
+        $align: center,
+        $justify: center,
+        $gap: gap("sm")
+    );
+}
