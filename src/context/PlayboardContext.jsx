@@ -145,17 +145,66 @@ export const PlayboardProvider = ({ children }) => {
         setCurrentTime(0);
         lastPlayedEventIndicesRef.current.clear();
       } else {
-        // Nettoyer les audios passés pour pouvoir redéclencher
+        // Nettoyer les audios passés et REPRENDRE ceux en cours !
         events.forEach((ev) => {
-          if (ev.startTime < currentTime) {
+          const duration = ev.sound?.duration || 1;
+          
+          if (ev.startTime + duration <= currentTime) {
+            // Événement déjà terminé, on le marque comme joué
             lastPlayedEventIndicesRef.current.add(ev.id);
+          } else if (ev.startTime <= currentTime && ev.startTime + duration > currentTime) {
+            // Événement en cours lors de la pause ! On le reprend.
+            lastPlayedEventIndicesRef.current.add(ev.id); // Évite qu'il ne soit redéclenché par updatePlaybackTime
+            
+            const url = ev.sound.previews?.['preview-hq-mp3'] || ev.sound.previews?.['preview-lq-ogg'];
+            if (url) {
+              const audio = new Audio(url);
+              audio.currentTime = currentTime - ev.startTime; // Reprise au bon offset temporel
+              audio.play();
+              playingAudiosRef.current.push(audio);
+              audio.onended = () => {
+                playingAudiosRef.current = playingAudiosRef.current.filter(a => a !== audio);
+              };
+            }
           } else {
+            // Événement dans le futur, il sera joué normalement
             lastPlayedEventIndicesRef.current.delete(ev.id);
           }
         });
       }
       lastTimeRef.current = performance.now();
       timerRef.current = requestAnimationFrame(updatePlaybackTime);
+    }
+  };
+
+  const seekToTime = (newTime) => {
+    setCurrentTime(newTime);
+    if (isPlaying) {
+      // Arrêter tous les sons en cours
+      playingAudiosRef.current.forEach(audio => {
+        audio.pause();
+      });
+      playingAudiosRef.current = [];
+      lastPlayedEventIndicesRef.current.clear();
+
+      events.forEach((ev) => {
+        const duration = ev.sound?.duration || 1;
+        if (ev.startTime + duration <= newTime) {
+          lastPlayedEventIndicesRef.current.add(ev.id);
+        } else if (ev.startTime <= newTime && ev.startTime + duration > newTime) {
+          lastPlayedEventIndicesRef.current.add(ev.id);
+          const url = ev.sound.previews?.['preview-hq-mp3'] || ev.sound.previews?.['preview-lq-ogg'];
+          if (url) {
+            const audio = new Audio(url);
+            audio.currentTime = newTime - ev.startTime;
+            audio.play();
+            playingAudiosRef.current.push(audio);
+            audio.onended = () => {
+              playingAudiosRef.current = playingAudiosRef.current.filter(a => a !== audio);
+            };
+          }
+        }
+      });
     }
   };
 
@@ -251,6 +300,26 @@ export const PlayboardProvider = ({ children }) => {
     setCurrentTime(0);
   };
 
+  const loadProject = (projectData) => {
+    if (projectData.pads) setPads(projectData.pads);
+    if (projectData.events) setEvents(projectData.events);
+    if (projectData.nbr_line) setLine(projectData.nbr_line);
+    if (projectData.nbr_col) setCol(projectData.nbr_col);
+    if (projectData.timelineDuration) setTimelineDuration(projectData.timelineDuration);
+    
+    // Réinitialisation du lecteur
+    setCurrentTime(0);
+    setIsPlaying(false);
+    setIsRecording(false);
+    lastPlayedEventIndicesRef.current.clear();
+    cancelAnimationFrame(timerRef.current);
+    playingAudiosRef.current.forEach(audio => {
+      audio.pause();
+      audio.currentTime = 0;
+    });
+    playingAudiosRef.current = [];
+  };
+
   const value = {
     pads,
     assignSoundToPad,
@@ -266,10 +335,12 @@ export const PlayboardProvider = ({ children }) => {
     toggleRecording,
     togglePlayback,
     stopPlayback,
+    seekToTime,
     setCurrentTime,
     updateEventPosition,
     deleteEvent,
     clearTimeline,
+    loadProject,
     nbr_line,
     setLine,
     nbr_col,

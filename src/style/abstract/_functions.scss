@@ -1,5 +1,6 @@
+@use "sass:map";
 @use "./variables" as *;
 
 @function gap($size) {
-  @return map-get($gaps, $size);
+  @return map.get($gaps, $size);
 }

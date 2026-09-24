@@ -9,7 +9,6 @@ import Banner from '../../components/Banner/Banner';
 function Connexion() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [username, setUsername] = useState('');
     const navigate = useNavigate();
 
     const handleSubmit = (e) => {

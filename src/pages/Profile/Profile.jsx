@@ -10,9 +10,10 @@ function Profile() {
 
   return (
     <div className="profile">
-      <img src={ProfileLogo} alt="profil" className="profile__profileLogo" />
-      <h1 className="profile__title">{data.pseudo}</h1>
-      <hr />
+      <div className="profile__header">
+        <img src={ProfileLogo} alt="profil" className="profile__profileLogo" />
+        <h1 className="profile__title">{data.pseudo}</h1>
+      </div>
       <h2 className="profile__lastMusicsTitle">Derniers morceaux créés</h2>
       <div className="profile__musicsGrid">
         {data.createdMusics.map((music) => {
