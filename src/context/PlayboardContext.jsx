@@ -18,14 +18,21 @@ export const PlayboardProvider = ({ children }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0); // en secondes
+  
+  // ÉTAT DES TOUCHES (Keybinds)
+  const [padKeys, setPadKeys] = useState({});
+  const [isConfiguringKeys, setIsConfiguringKeys] = useState(false);
+  const [keyConfigPopup, setKeyConfigPopup] = useState({ isOpen: false, padIndex: null });
+  const [isAnyPadSoundPlaying, setIsAnyPadSoundPlaying] = useState(false);
 
   // Durée totale de la timeline
   const [timelineDuration, setTimelineDuration] = useState(10);
 
   const timerRef = useRef(null);
   const lastTimeRef = useRef(0);
-  const playingAudiosRef = useRef([]); // Garde une trace des audios en cours de lecture
+  const playingAudiosRef = useRef([]); // Garde une trace des audios de la timeline
   const lastPlayedEventIndicesRef = useRef(new Set()); // Pour ne pas rejouer le même événement
+  const padAudiosRef = useRef({}); // Garde une trace des audios lancés manuellement par pad
 
   // ACTIONS DES PADS
   const assignSoundToPad = (sound, padIndex) => {
@@ -56,21 +63,41 @@ export const PlayboardProvider = ({ children }) => {
     }
   };
 
-  const playSound = (previewUrl) => {
+  const playSound = (previewUrl, padIndex = null) => {
     if (!previewUrl) return null;
+    
+    // Si c'est un déclenchement manuel depuis un pad, on coupe l'ancien son (Mode DJ)
+    if (padIndex !== null && padAudiosRef.current[padIndex]) {
+      padAudiosRef.current[padIndex].pause();
+      padAudiosRef.current[padIndex].currentTime = 0;
+    }
+
     const audio = new Audio(previewUrl);
     audio.play();
+
+    if (padIndex !== null) {
+      padAudiosRef.current[padIndex] = audio;
+      setIsAnyPadSoundPlaying(true);
+      audio.addEventListener('ended', () => {
+        if (padAudiosRef.current[padIndex] === audio) {
+          padAudiosRef.current[padIndex] = null;
+        }
+        setIsAnyPadSoundPlaying(Object.values(padAudiosRef.current).some(a => a !== null && !a.paused));
+      });
+    }
+
     return audio;
   };
 
   const handlePadClick = (padIndex) => {
     const sound = pads[padIndex];
 
+    // Ne rien faire si le pad est vide (évite boutons vides dans timeline)
+    if (!sound) return;
+
     // Joue le son si existant
-    if (sound) {
-      const previewUrl = sound.previews?.['preview-hq-mp3'] || sound.previews?.['preview-lq-ogg'];
-      playSound(previewUrl);
-    }
+    const previewUrl = sound.previews?.['preview-hq-mp3'] || sound.previews?.['preview-lq-ogg'];
+    playSound(previewUrl, padIndex);
 
     // Si on enregistre, on ajoute à la timeline
     if (isRecording) {
@@ -111,6 +138,23 @@ export const PlayboardProvider = ({ children }) => {
       checkAndExtendTimeline(currentTime);
     }
   };
+
+  // LECTURE CLAVIER
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.target.tagName === 'INPUT' || isConfiguringKeys) return;
+      
+      const key = e.key.toUpperCase();
+      const padIndexStr = Object.keys(padKeys).find(k => padKeys[k] === key);
+      
+      if (padIndexStr !== undefined) {
+        handlePadClick(Number(padIndexStr));
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [padKeys, pads, isRecording, isConfiguringKeys, currentTime]); // Dépendances importantes pour avoir les dernières valeurs
 
   // ACTIONS DE LA TIMELINE
   const toggleRecording = () => {
@@ -220,6 +264,18 @@ export const PlayboardProvider = ({ children }) => {
     playingAudiosRef.current = [];
     setCurrentTime(0);
     lastPlayedEventIndicesRef.current.clear();
+  };
+
+  const stopAllSounds = () => {
+    // Arrêter UNIQUEMENT tous les sons manuels des pads (DJ mode)
+    Object.values(padAudiosRef.current).forEach(audio => {
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+      }
+    });
+    padAudiosRef.current = {};
+    setIsAnyPadSoundPlaying(false);
   };
 
   const checkAndExtendTimeline = (time) => {
@@ -335,6 +391,7 @@ export const PlayboardProvider = ({ children }) => {
     toggleRecording,
     togglePlayback,
     stopPlayback,
+    stopAllSounds,
     seekToTime,
     setCurrentTime,
     updateEventPosition,
@@ -344,7 +401,14 @@ export const PlayboardProvider = ({ children }) => {
     nbr_line,
     setLine,
     nbr_col,
-    setCol
+    setCol,
+    padKeys,
+    setPadKeys,
+    isConfiguringKeys,
+    setIsConfiguringKeys,
+    keyConfigPopup,
+    setKeyConfigPopup,
+    isAnyPadSoundPlaying
   };
 
   return (
