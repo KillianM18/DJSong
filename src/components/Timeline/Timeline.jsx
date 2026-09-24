@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { usePlayboard } from '../../context/PlayboardContext';
 import { Play, Pause, Square, Trash2, Mic } from 'lucide-react';
 import './Timeline.scss';
@@ -17,7 +17,7 @@ export default function Timeline() {
     updateEventPosition,
     deleteEvent,
     clearTimeline,
-    setCurrentTime
+    seekToTime
   } = usePlayboard();
 
   const timelineRef = useRef(null);
@@ -29,6 +29,41 @@ export default function Timeline() {
   const tracks = Array.from({ length: tracksCount }).map((_, i) => i);
 
   const pixelsPerSecond = 100; // 1 seconde = 100px
+
+  // Auto-scroll de la timeline pendant la lecture
+  const scrollContainerRef = useRef(null);
+
+  useEffect(() => {
+    if (!scrollContainerRef.current) return;
+    
+    const container = scrollContainerRef.current;
+    
+    // Au Stop, currentTime retombe à 0. On force le scroll tout à gauche.
+    if (currentTime === 0) {
+      container.scrollLeft = 0;
+      return;
+    }
+
+    const playheadPosition = currentTime * pixelsPerSecond;
+    const containerWidth = container.clientWidth;
+    const currentScroll = container.scrollLeft;
+    const threshold = containerWidth / 2;
+    
+    // Si on n'est pas en lecture, on ne scrolle que si le trait sort de l'écran (ex: clic au loin)
+    if (!isPlaying && !isRecording) {
+      if (playheadPosition < currentScroll || playheadPosition > currentScroll + containerWidth) {
+        container.scrollLeft = Math.max(0, playheadPosition - threshold);
+      }
+      return;
+    }
+
+    // Comportement standard de suivi pendant la lecture
+    if (playheadPosition < currentScroll || playheadPosition > currentScroll + containerWidth) {
+      container.scrollLeft = Math.max(0, playheadPosition - threshold);
+    } else if (playheadPosition > currentScroll + threshold) {
+      container.scrollLeft = playheadPosition - threshold;
+    }
+  }, [currentTime, isPlaying, isRecording, pixelsPerSecond]);
 
   const handlePointerDown = (e, id) => {
     e.stopPropagation();
@@ -67,7 +102,7 @@ export default function Timeline() {
     const rect = timelineRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left + timelineRef.current.scrollLeft;
     const newTime = Math.max(0, x / pixelsPerSecond);
-    setCurrentTime(newTime);
+    seekToTime(newTime);
   };
 
   const displayTotalTime = events.length === 0 
@@ -103,7 +138,7 @@ export default function Timeline() {
         </div>
       </div>
 
-      <div className="timeline-tracks-container">
+      <div className="timeline-tracks-container" ref={scrollContainerRef}>
         <div className="tracks-headers">
           {tracks.map((trackIndex) => (
             <div key={trackIndex} className="track-header">
@@ -124,10 +159,14 @@ export default function Timeline() {
             style={{ transform: `translateX(${currentTime * pixelsPerSecond}px)` }}
           />
 
-          {tracks.map((trackIndex) => (
-            <div key={trackIndex} className="track-row" style={{ width: `${timelineDuration * pixelsPerSecond}px` }}>
+          {tracks.map((trackIndex) => {
+            const trackWidth = Math.max(timelineDuration, displayTotalTime + 5) * pixelsPerSecond;
+            const markersCount = Math.ceil(Math.max(timelineDuration, displayTotalTime + 5));
+
+            return (
+            <div key={trackIndex} className="track-row" style={{ width: `${trackWidth}px` }}>
               {/* Lignes de repère toutes les secondes */}
-              {Array.from({ length: timelineDuration }).map((_, sec) => (
+              {Array.from({ length: markersCount }).map((_, sec) => (
                 <div key={sec} className="time-marker" style={{ left: `${sec * pixelsPerSecond}px` }} />
               ))}
               
@@ -144,7 +183,7 @@ export default function Timeline() {
                     className={`timeline-event ${isDragging ? 'dragging' : ''}`}
                     style={{ 
                       left: `${ev.startTime * pixelsPerSecond}px`,
-                      width: `${Math.min(width, 200)}px` // Limiter la largeur max visuellement
+                      width: `${width}px` // La vraie durée du son
                     }}
                     onPointerDown={(e) => handlePointerDown(e, ev.id)}
                   >
@@ -159,7 +198,8 @@ export default function Timeline() {
                 );
               })}
             </div>
-          ))}
+          );
+        })}
         </div>
       </div>
     </div>
