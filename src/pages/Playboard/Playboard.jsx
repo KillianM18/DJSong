@@ -7,13 +7,14 @@ import { useState } from "react";
 import Board from "../../components/Board/Board";
 import MusicHoverButton from "../../components/MusicHoverButton/MusicHoverButton";
 import { usePlayboard } from "../../context/PlayboardContext";
-import { Import, Keyboard, Square, Maximize2, Minimize2 } from "lucide-react";
+import { Import, Keyboard, Square, Maximize2, Minimize2, Sun, Moon } from "lucide-react";
 
 function Playboard() {
   const { nbr_line, setLine, nbr_col, setCol, stopAllSounds, isConfiguringKeys, setIsConfiguringKeys, keyConfigPopup, setKeyConfigPopup, pads, padKeys, setPadKeys, isAnyPadSoundPlaying } = usePlayboard();
   const [isNewLine, setIsNewLine] = useState(false);
   const [isNewColumn, setIsNewColumn] = useState(false);
   const [isTimelineExpanded, setIsTimelineExpanded] = useState(false);
+  const [isLightMode, setIsLightMode] = useState(false);
 
   if (nbr_line > 6 || nbr_col > 6) {
     if (nbr_line > 6) {
@@ -47,6 +48,7 @@ function Playboard() {
             nb_line={nbr_line}
             isNewLine={isNewLine}
             isNewColumn={isNewColumn}
+            isLightMode={isLightMode}
           />
           <div className="main__controls">
             <div className="control-row">
@@ -122,6 +124,16 @@ function Playboard() {
               >
                 <Square size={18} />
                 Stop All
+              </button>
+
+              <button
+                className="main__userChoice__link"
+                onClick={() => setIsLightMode(!isLightMode)}
+                style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+                title={isLightMode ? "Passer en mode sombre" : "Passer en mode clair (MPC Retro)"}
+              >
+                {isLightMode ? <Moon size={18} /> : <Sun size={18} />}
+                Thème
               </button>
 
               <MusicHoverButton

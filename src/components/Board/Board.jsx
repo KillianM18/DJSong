@@ -1,7 +1,7 @@
 import Line from "./Line";
 import "./Board.scss";
 
-function Board({ nb_col, nb_line, isNewLine, isNewColumn }) {
+function Board({ nb_col, nb_line, isNewLine, isNewColumn, isLightMode }) {
   let board = [];
   for (let i = 0; i < nb_line; i++) {
     board.push(
@@ -14,6 +14,10 @@ function Board({ nb_col, nb_line, isNewLine, isNewColumn }) {
       />
     );
   }
-  return <div className="playboard">{board}</div>;
+  return (
+    <div className={`playboard ${isLightMode ? 'light-mode' : ''}`}>
+      {board}
+    </div>
+  );
 }
 export default Board;
