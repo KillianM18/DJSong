@@ -145,7 +145,7 @@ function Playboard() {
               {isTimelineExpanded ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
             </button>
           </div>
-          <Timeline />
+          <Timeline isExpanded={isTimelineExpanded} />
           <ImportExportButton />
         </div>
       </div>

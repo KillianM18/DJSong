@@ -55,7 +55,8 @@
         }
 
         > div:nth-child(2) { // The Timeline component
-          flex: 1;
+          flex: 0 1 auto; /* S'adapte au contenu, mais peut rétrécir */
+          min-height: 0; 
         }
       }
     }

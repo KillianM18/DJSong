@@ -3,7 +3,7 @@ import { usePlayboard } from '../../context/PlayboardContext';
 import { Play, Pause, Square, Trash2, Mic } from 'lucide-react';
 import './Timeline.scss';
 
-export default function Timeline() {
+export default function Timeline({ isExpanded = false }) {
   const {
     events,
     pads,
@@ -46,7 +46,7 @@ export default function Timeline() {
   const displayTracksCount = trackLimit === Infinity ? Math.max(4, maxTrackIndex + 1) : trackLimit;
   const tracks = Array.from({ length: displayTracksCount }).map((_, i) => i);
 
-  const pixelsPerSecond = 100; // 1 seconde = 100px
+  const pixelsPerSecond = 100;
 
   // Auto-scroll de la timeline pendant la lecture
   const scrollContainerRef = useRef(null);
@@ -98,7 +98,7 @@ export default function Timeline() {
     let newTime = x / pixelsPerSecond;
     if (newTime < 0) newTime = 0;
     
-    // Position y pour changer de piste (hauteur piste = 60px)
+    // Position y pour changer de piste
     const y = e.clientY - rect.top + timelineRef.current.scrollTop;
     let newTrackIndex = Math.floor(y / 60);
     if (newTrackIndex < 0) newTrackIndex = 0;
@@ -136,7 +136,9 @@ export default function Timeline() {
         <button 
           className={`control-btn ${isRecording ? 'recording' : ''}`} 
           onClick={toggleRecording}
-          title="Enregistrer"
+          title={isExpanded ? "Enregistrement désactivé en plein écran" : "Enregistrer"}
+          disabled={isExpanded}
+          style={{ opacity: isExpanded ? 0.5 : 1, cursor: isExpanded ? 'not-allowed' : 'pointer' }}
         >
           <Mic size={20} />
         </button>
@@ -186,10 +188,6 @@ export default function Timeline() {
 
             return (
             <div key={trackIndex} className="track-row" style={{ width: `${trackWidth}px` }}>
-              {/* Lignes de repère toutes les secondes */}
-              {Array.from({ length: markersCount }).map((_, sec) => (
-                <div key={sec} className="time-marker" style={{ left: `${sec * pixelsPerSecond}px` }} />
-              ))}
               
               {/* Événements de cette piste */}
               {events.filter(ev => ev.trackIndex === trackIndex).map(ev => {
