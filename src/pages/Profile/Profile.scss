@@ -1,14 +1,21 @@
 @use "../../style/abstract/shared" as *;
 
 .profile{
-    margin:5vw;
+    margin:4vw;
     // height: 80vh;
     flex:1;
+    &__subscriptionButton{
+      @include flex(
+        $direction: row,
+        $align: flex-end,
+        $justify: flex-end,
+      );
+      }
     &__header{
         @include flex(
             $direction: column,
             $align: center,
-            $justify: flex-end,
+            $justify: center,
             $gap: gap("lg")
         );
 
@@ -16,7 +23,7 @@
     }
 
     &__profileLogo{
-        width: 10vw;
+        width: 8vw;
         color: $blue;
         background: rgba($white, 0.2);
         border: 1px solid rgba($blue, 0.1);
@@ -27,6 +34,16 @@
 
   &__title {
     color: $white;
+    @include flex(
+        $direction: row,
+        $align: center,
+        $justify: center,
+        $gap: gap("sm")
+    );
+
+    img{
+      width: 50px;
+    }
   }
 
   &__lastMusicsTitle {

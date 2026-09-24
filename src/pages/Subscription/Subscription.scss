@@ -2,6 +2,7 @@
 
 
 .Abonnement{
+    flex: 1;
     @include flex(
         $direction: column,
         $align: center,
