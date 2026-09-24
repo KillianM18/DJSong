@@ -34,22 +34,33 @@ export default function Timeline() {
   const scrollContainerRef = useRef(null);
 
   useEffect(() => {
-    if (!scrollContainerRef.current || (!isPlaying && !isRecording)) return;
+    if (!scrollContainerRef.current) return;
     
     const container = scrollContainerRef.current;
+    
+    // Au Stop, currentTime retombe à 0. On force le scroll tout à gauche.
+    if (currentTime === 0) {
+      container.scrollLeft = 0;
+      return;
+    }
+
     const playheadPosition = currentTime * pixelsPerSecond;
     const containerWidth = container.clientWidth;
     const currentScroll = container.scrollLeft;
-    
-    // On veut centrer la tête de lecture.
     const threshold = containerWidth / 2;
     
-    // Si on est en dehors de l'écran (ex: lancement de la lecture) on saute au centre direct
+    // Si on n'est pas en lecture, on ne scrolle que si le trait sort de l'écran (ex: clic au loin)
+    if (!isPlaying && !isRecording) {
+      if (playheadPosition < currentScroll || playheadPosition > currentScroll + containerWidth) {
+        container.scrollLeft = Math.max(0, playheadPosition - threshold);
+      }
+      return;
+    }
+
+    // Comportement standard de suivi pendant la lecture
     if (playheadPosition < currentScroll || playheadPosition > currentScroll + containerWidth) {
       container.scrollLeft = Math.max(0, playheadPosition - threshold);
-    } 
-    // Sinon, si on dépasse la moitié, on décale doucement pour suivre
-    else if (playheadPosition > currentScroll + threshold) {
+    } else if (playheadPosition > currentScroll + threshold) {
       container.scrollLeft = playheadPosition - threshold;
     }
   }, [currentTime, isPlaying, isRecording, pixelsPerSecond]);
