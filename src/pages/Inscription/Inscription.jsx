@@ -1,6 +1,8 @@
 import React from 'react';
 import './Inscription.scss';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
 import { useState } from 'react';
 import MusicHoverButton from '../../components/MusicHoverButton/MusicHoverButton';
 import Banner from '../../components/Banner/Banner';
@@ -32,6 +34,9 @@ function Inscription() {
             <input type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
             <MusicHoverButton type="submit" label="S'inscrire" />
           </form>
+        </div>
+        <div className="signup-link">
+          <p>Vous avez déjà un compte? <Link to="/connexion" className="link">Connectez-vous ici</Link></p>
         </div>
       </div>
     </div>
