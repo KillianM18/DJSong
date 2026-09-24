@@ -1,20 +1,14 @@
 @use "../../style/abstract/shared" as *;
-.left{
-    
-        opacity: 0.9;
-        background-color: $blue;
-        width: 30%;
-        height: 100vh;
-
-        border-right: 1px solid $gray;
-        .logo{
-
-            img{
-                
-                width: 100%;
-                height: 100%;
-                object-fit: contain;
-                
-            }
-        }
+.left {
+  opacity: 0.9;
+  background-color: $blue;
+  width: 30%;
+  height: 100vh;
+  .logo {
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
     }
+  }
+}

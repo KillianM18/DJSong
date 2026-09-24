@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import "./Header.scss";
-import headerPlaceholder from "../../assets/images/logo_cropted.jpg";
-import ProfileLogo from "../../assets/images/user.svg";
+import headerPlaceholder from "../../assets/images/logo_blanc.png";
+import ProfileLogo from "../../assets/images/user_blanc.png";
 
 function Header() {
   return (

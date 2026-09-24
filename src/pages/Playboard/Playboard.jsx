@@ -1,10 +1,12 @@
 import "./Playboard.scss";
-import Board from "../../components/Board/Board";
 import { Link } from "react-router-dom";
 import Timeline from "../../components/Timeline/Timeline";
 import ImportExportButton from "../../components/ImportExportButton/ImportExportButton";
 
 import { useState } from "react";
+import Board from "../../components/Board/Board";
+import Timeline from "../../components/Timeline/Timeline";
+import MusicHoverButton from "../../components/MusicHoverButton/MusicHoverButton";
 import { usePlayboard } from "../../context/PlayboardContext";
 import { Import } from "lucide-react";
 
@@ -35,7 +37,6 @@ function Playboard() {
 
   return (
     <div className="main">
-
       <div className="main__userChoice">
         <span>Lignes :</span>
         <button
@@ -78,7 +79,11 @@ function Playboard() {
         >
           +
         </button>
-        <Link to="/playboard/parameters" className="main__userChoice__link">Chercher un son</Link>
+        <MusicHoverButton
+          label="Chercher un son"
+          to="/playboard/parameters"
+          className="main__userChoice__link"
+        />
       </div>
       <Board
         nb_col={nbr_col}

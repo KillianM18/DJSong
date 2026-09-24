@@ -14,41 +14,16 @@ $accent-color: $rose;
   font-family: "Inter", sans-serif;
   padding: 2rem;
   box-sizing: border-box;
-  
-  @include flex(
-    $direction: column,
-    $align: center,
-  );
+
+  @include flex($direction: column, $align: center);
 
   .playboard-param-content {
     width: 100%;
     max-width: 1200px;
-    
+
     display: flex;
     flex-direction: column;
     gap: 2rem;
-  }
-
-  .back-btn {
-    align-self: flex-start;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: $text-color;
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: all 0.2s ease;
-
-    &:hover {
-      background: rgba(255, 255, 255, 0.1);
-      transform: translateX(-4px);
-      color: $hover-color;
-      border-color: rgba(162, 235, 240, 0.3);
-    }
   }
 
   .playboard-header {
@@ -132,7 +107,7 @@ $accent-color: $rose;
         font-size: 1.1rem;
         font-family: "Inter", sans-serif;
         cursor: pointer;
-        background: $secondary-color;
+        background: rgba($hover-color, 0.4);
         transition: all 0.2s ease;
 
         &:hover {
@@ -187,20 +162,20 @@ $accent-color: $rose;
       padding: 0.6rem 1.2rem;
       border-radius: 20px;
       border: 1px solid rgba(255, 255, 255, 0.1);
-      background: rgba(255, 255, 255, 0.03);
-      color: #e0e0e0;
+      background: rgba(255, 255, 255, 0.6);
+      color: $bg-color;
       font-size: 0.95rem;
       cursor: pointer;
       transition: all 0.2s ease;
 
       &:hover {
-        background: rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.3);
         border-color: rgba(255, 255, 255, 0.2);
         color: $hover-color;
       }
 
       &.active {
-        background: rgba($accent-color, 0.2);
+        background: rgba($accent-color, 0.6);
         color: $text-color;
         border-color: $accent-color;
       }
@@ -378,14 +353,15 @@ $accent-color: $rose;
       height: 45px;
       border-radius: 50%;
       border: 1px solid rgba(255, 255, 255, 0.1);
-      background: rgba(255, 255, 255, 0.05);
-      color: $text-color;
+      background: rgba(255, 255, 255, 0.4);
+      color: $hover-color;
       cursor: pointer;
       transition: all 0.2s ease;
 
       &:hover:not(:disabled) {
         background: rgba($accent-color, 0.2);
         border-color: $accent-color;
+        color: $accent-color;
       }
 
       &:disabled {
@@ -438,7 +414,10 @@ $accent-color: $rose;
 
 .pad-modal-overlay {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: rgba(0, 0, 0, 0.75);
   display: flex;
   justify-content: center;
@@ -455,20 +434,20 @@ $accent-color: $rose;
   text-align: center;
   width: 90%;
   max-width: 400px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-  
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+
   h2 {
     margin-top: 0;
     margin-bottom: 0.5rem;
     font-size: 1.25rem;
   }
-  
+
   p {
     color: $secondary-color;
     font-size: 0.9rem;
     margin-bottom: 1.5rem;
   }
-  
+
   .pad-mini-board > div {
     &:hover .delete-pad-btn {
       opacity: 1;
@@ -486,7 +465,7 @@ $accent-color: $rose;
     justify-content: center;
     align-items: center;
     transition: all 0.2s ease;
-    
+
     &:hover {
       background: rgba(255, 255, 255, 0.1);
       transform: scale(1.05);
@@ -502,7 +481,7 @@ $accent-color: $rose;
       }
     }
   }
-  
+
   .delete-pad-btn {
     position: absolute;
     top: -8px;
@@ -521,14 +500,14 @@ $accent-color: $rose;
     cursor: pointer;
     opacity: 0;
     transition: all 0.2s;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
     z-index: 10;
-    
+
     &:hover {
       transform: scale(1.2);
     }
   }
-  
+
   .cancel-btn {
     margin-top: 1.5rem;
     padding: 0.75rem 2rem;
@@ -539,7 +518,7 @@ $accent-color: $rose;
     cursor: pointer;
     font-weight: 500;
     transition: background 0.2s;
-    
+
     &:hover {
       background: rgba(255, 255, 255, 0.1);
     }
