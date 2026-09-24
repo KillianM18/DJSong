@@ -5,7 +5,6 @@ import ImportExportButton from "../../components/ImportExportButton/ImportExport
 
 import { useState } from "react";
 import Board from "../../components/Board/Board";
-import Timeline from "../../components/Timeline/Timeline";
 import MusicHoverButton from "../../components/MusicHoverButton/MusicHoverButton";
 import { usePlayboard } from "../../context/PlayboardContext";
 import { Import } from "lucide-react";
