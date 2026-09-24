@@ -5,6 +5,7 @@ a{
     text-decoration: none;
 }
 .music-btn-stage {
+  
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -18,32 +19,30 @@ a{
 }
 
 .music-hover-btn {
-  position: relative;
-  z-index: 2;
   display: inline-flex;
-  align-items: center;
-  background-color: $black;
-  color: $white;
-  font-size: 18px;
-  padding: 10px 24px;
-  border: 1px solid $white;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.1s ease;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      background-color: $black;
+      color: $white;
+      padding: 0.6rem 1.2rem;
+      border: 1px solid $white;
+      border-radius: 20px;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      margin-left: 1rem;
 
-  &:hover,
-  &:focus-visible {
-    background-color: $rose;
-  }
+      &:hover {
+        background: rgba($rose, 0.4);
+        border-color: $rose;
+        box-shadow: 0 4px 15px rgba($rose, 0.4);
+      }
 
-  &:active {
-    transform: scale(0.97);
-  }
-
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
+      &:active {
+        transform: scale(0.95);
+      }
+  
 }
 
 .note {
