@@ -3,7 +3,7 @@ import { usePlayboard } from '../../context/PlayboardContext';
 import { Play, Pause, Square, Trash2, Mic } from 'lucide-react';
 import './Timeline.scss';
 
-export default function Timeline() {
+export default function Timeline({ isExpanded = false }) {
   const {
     events,
     pads,
@@ -23,12 +23,30 @@ export default function Timeline() {
   const timelineRef = useRef(null);
   const [draggingId, setDraggingId] = useState(null);
 
-  // Déterminer le nombre de pistes
-  const maxTrackIndex = events.length > 0 ? Math.max(...events.map(ev => ev.trackIndex)) : -1;
-  const tracksCount = Math.max(3, maxTrackIndex + 1);
-  const tracks = Array.from({ length: tracksCount }).map((_, i) => i);
+  // Simulation de l'abonnement utilisateur (à relier plus tard au vrai système d'auth)
+  // Valeurs possibles : 'gratuit', 'or', 'platine', 'diamant'
+  const userSubscription = 'gratuit';
 
-  const pixelsPerSecond = 100; // 1 seconde = 100px
+  // Déterminer la limite de pistes selon l'abonnement
+  const getTrackLimit = (sub) => {
+    switch(sub) {
+      case 'gratuit': return 2;
+      case 'or': return 3;
+      case 'platine': return 4;
+      case 'diamant': return Infinity;
+      default: return 2;
+    }
+  };
+
+  const trackLimit = getTrackLimit(userSubscription);
+  const maxTrackIndex = events.length > 0 ? Math.max(...events.map(ev => ev.trackIndex)) : -1;
+  
+  // S'il n'y a pas de limite, on affiche au moins 4 pistes, ou plus si des événements sont plus bas.
+  // S'il y a une limite, on affiche exactement ce nombre de pistes.
+  const displayTracksCount = trackLimit === Infinity ? Math.max(4, maxTrackIndex + 1) : trackLimit;
+  const tracks = Array.from({ length: displayTracksCount }).map((_, i) => i);
+
+  const pixelsPerSecond = 100;
 
   // Auto-scroll de la timeline pendant la lecture
   const scrollContainerRef = useRef(null);
@@ -80,12 +98,15 @@ export default function Timeline() {
     let newTime = x / pixelsPerSecond;
     if (newTime < 0) newTime = 0;
     
-    // Position y pour changer de piste (hauteur piste = 60px)
+    // Position y pour changer de piste
     const y = e.clientY - rect.top + timelineRef.current.scrollTop;
     let newTrackIndex = Math.floor(y / 60);
     if (newTrackIndex < 0) newTrackIndex = 0;
-    // Permet de glisser vers le bas pour créer une nouvelle piste
-    if (newTrackIndex > tracksCount) newTrackIndex = tracksCount;
+    
+    // Limitation selon l'abonnement
+    if (newTrackIndex >= displayTracksCount) {
+      newTrackIndex = displayTracksCount - 1;
+    }
     
     updateEventPosition(draggingId, newTime, newTrackIndex);
   };
@@ -115,7 +136,9 @@ export default function Timeline() {
         <button 
           className={`control-btn ${isRecording ? 'recording' : ''}`} 
           onClick={toggleRecording}
-          title="Enregistrer"
+          title={isExpanded ? "Enregistrement désactivé en plein écran" : "Enregistrer"}
+          disabled={isExpanded}
+          style={{ opacity: isExpanded ? 0.5 : 1, cursor: isExpanded ? 'not-allowed' : 'pointer' }}
         >
           <Mic size={20} />
         </button>
@@ -165,10 +188,6 @@ export default function Timeline() {
 
             return (
             <div key={trackIndex} className="track-row" style={{ width: `${trackWidth}px` }}>
-              {/* Lignes de repère toutes les secondes */}
-              {Array.from({ length: markersCount }).map((_, sec) => (
-                <div key={sec} className="time-marker" style={{ left: `${sec * pixelsPerSecond}px` }} />
-              ))}
               
               {/* Événements de cette piste */}
               {events.filter(ev => ev.trackIndex === trackIndex).map(ev => {
