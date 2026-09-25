@@ -1,11 +1,17 @@
 const myFetch = (route = "", methode = "GET", body = "") => {
-  return fetch(`http://localhost:80/${route}`, {
+  // Si body est vide et methode est GET, on ne passe pas de body
+  const options = {
     method: methode,
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
     },
-    body: body,
-  });
+  };
+
+  if (methode !== "GET" && body) {
+    options.body = body;
+  }
+
+  return fetch(`/api/${route}`, options);
 };
 
 // const call = async () => {
