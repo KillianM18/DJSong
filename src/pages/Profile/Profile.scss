@@ -4,13 +4,32 @@
     margin:4vw;
     // height: 80vh;
     flex:1;
-    &__subscriptionButton{
+    &__header-actions {
       @include flex(
         $direction: row,
-        $align: flex-end,
+        $align: center,
         $justify: flex-end,
+        $gap: gap("md")
       );
+
+      .profile__logout-btn {
+        background: transparent;
+        color: $rose;
+        border: 1px solid $rose;
+        padding: 0.5rem 1.5rem;
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+
+        &:hover {
+          background: rgba($rose, 0.1);
+          transform: translateY(-2px);
+        }
       }
+    }
     &__header{
         @include flex(
             $direction: column,

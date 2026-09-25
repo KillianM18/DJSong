@@ -16,11 +16,15 @@
     position: relative;
     overflow: hidden;
 
-    &:hover {
+    &:not(&--non-clickable):hover {
       transform: translateY(-5px);
       border-color: $blue;
       background: rgba($gray, 0.4);
     }
+
+  &__name {
+    color: $white;
+  }
 
   & a {
     color: $white;
