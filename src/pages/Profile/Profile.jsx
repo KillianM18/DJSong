@@ -13,17 +13,12 @@ function Profile() {
   const navigate = useNavigate();
   
   const data = {
-    pseudo: "Jeremy",
     createdMusics: [
       { name: "Neon Reverie", duration: "4:18" },
       { name: "Synth City", duration: "3:45" },
       { name: "Digital Pulse", duration: "5:12" },
       { name: "Electric Echo", duration: "4:01" }
     ],
-    abonnement: {
-      name: "or",
-      price: "9,99€/mois",
-    },
     memberSince: "Janvier 2026"
   };
   const [pseudo, setPseudo] = useState("");
@@ -69,7 +64,7 @@ function Profile() {
     navigate("/home_connexion");
   };
 
-  const limit = getProjectLimit(data.abonnement.name);
+  const limit = getProjectLimit(subscription?.name || "free");
 
   return (
     <div className="profile">
@@ -84,10 +79,10 @@ function Profile() {
           
           <div className="profile__info">
             <div className="profile__name-row">
-              <h1 className="profile__name">{data.pseudo}</h1>
-              <div className={`profile__badge profile__badge--${data.abonnement.name}`}>
-                <img src={`src/assets/images/logo_${data.abonnement.name}.webp`} alt={data.abonnement.name} />
-                <span>{data.abonnement.name}</span>
+              <h1 className="profile__name">{pseudo}</h1>
+              <div className={`profile__badge profile__badge--${subscription?.name || "free"}`}>
+                <img src={`src/assets/images/logo_${subscription?.name || "free"}.webp`} alt={subscription?.name || "free"} />
+                <span>{subscription?.name || "free"}</span>
               </div>
             </div>
             

@@ -5,6 +5,7 @@ const myFetch = (route = "", methode = "GET", body = "") => {
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
     },
+    credentials: "include",
   };
 
   if (methode !== "GET" && body) {
@@ -13,11 +14,5 @@ const myFetch = (route = "", methode = "GET", body = "") => {
 
   return fetch(`/api/${route}`, options);
 };
-
-// const call = async () => {
-//   const res = await myFetch("POST", "firstname=Nicolas&lastname=Texier");
-//   const json = await res.json();
-//   console.log(json);
-// };
 
 export default myFetch;

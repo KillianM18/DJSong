@@ -21,10 +21,7 @@ function Inscription() {
       "POST",
       `username=${username}&email=${email}&password=${password}`,
     );
-    // const json = await res.json();
-
     if (res.ok) {
-      // console.log(json);
       navigate("/playboard");
     }
   };
