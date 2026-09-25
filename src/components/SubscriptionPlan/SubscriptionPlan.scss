@@ -1,0 +1,21 @@
+@use "../../style/abstract/shared" as *;
+
+.subscription-plans {
+    @include flex(
+        $direction: row,
+        $align: center,
+        $justify: center,
+        $gap: gap("sm")
+    );
+    margin: 1vw 0;
+    flex-wrap: wrap;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 4px;
+
+    &__state {
+        text-align: center;
+        padding: 40px;
+        color: $gray;
+    }
+}

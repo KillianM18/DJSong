@@ -1,0 +1,21 @@
+@use "../../style/abstract/shared" as *;
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem 1rem 2rem;
+
+  height: 5vh;
+  background: rgba(162, 235, 240, 0.6);
+  &__logo {
+    height: 120%;
+  }
+  &__profile {
+    height: 100%;
+    width: auto;
+    @include flex($justify: end, $align: center);
+  }
+  &__profileLogo {
+    height: 80%;
+  }
+}

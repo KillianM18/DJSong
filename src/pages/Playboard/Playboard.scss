@@ -1,0 +1,201 @@
+// FFFFFB blanc
+// 313742 bleu foncé
+// 5A6A7C bleu gris
+// A2EBF0 bleu clair
+// DB3069 rose
+
+@use "../../style/abstract/shared" as *;
+
+.main {
+  width: 100%;
+  height: calc(100vh - 70px);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  &__layout {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+    padding: 2rem;
+    gap: 2rem;
+    box-sizing: border-box;
+    align-items: center; /* Centre verticalement et empêche l'étirement du fond transparent */
+
+    @media (max-width: 1000px) {
+      flex-direction: column;
+      height: auto;
+      overflow-y: auto;
+    }
+
+    &.timeline-expanded {
+      .main__left {
+        filter: blur(5px);
+        pointer-events: none;
+        opacity: 0.5;
+      }
+
+      .main__right {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 9000;
+        background: rgba(0, 0, 0, 0.9);
+        padding: 3rem;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+
+        .timeline-header {
+          margin-bottom: 2rem;
+        }
+
+        > div:nth-child(2) { // The Timeline component
+          flex: 0 1 auto; /* S'adapte au contenu, mais peut rétrécir */
+          min-height: 0; 
+        }
+      }
+    }
+  }
+
+  &__left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    transition: all 0.3s ease;
+  }
+
+  &__right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 24px;
+    padding: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    gap: 1.5rem;
+
+    .timeline-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: $white;
+
+      h3 {
+        margin: 0;
+        font-family: 'Outfit', sans-serif;
+        font-size: 1.5rem;
+        color: $blue;
+      }
+
+      .expand-timeline-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        color: $white;
+        border-radius: 8px;
+        padding: 0.5rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background: rgba($blue, 0.5);
+          color: $white;
+        }
+      }
+    }
+  }
+
+  &__controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1.5rem;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    width: 100%;
+    max-width: 600px;
+  }
+
+  .control-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    width: 100%;
+  }
+
+  .control-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: $white;
+    font-size: 1.1rem;
+  }
+
+  .control-group-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  &__userChoice {
+    &__btn {
+      box-sizing: border-box;
+      width: 2.2rem;
+      aspect-ratio: 1/1;
+      @include flex($align: center, $justify: center);
+      background: rgba($blue, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: $white;
+      font-size: 1.2rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+
+      &:hover {
+        background: rgba($blue, 0.9);
+      }
+    }
+
+    &__link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: $white;
+      padding: 0.7rem 1.2rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      cursor: pointer;
+
+      &:hover {
+        background: rgba($rose, 0.4);
+        border-color: $rose;
+      }
+
+      &:active {
+        transform: scale(0.95);
+      }
+    }
+  }
+}
