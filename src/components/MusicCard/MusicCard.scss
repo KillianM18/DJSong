@@ -1,37 +1,93 @@
 @use "../../style/abstract/shared" as *;
 
 .musicCard {
-  background: rgba($gray, 0.2);
-    border: 1px solid rgba($blue, 0.1);
-    border-radius: 20px;
-    padding: 1.5rem;
+  background: rgba($gray, 0.1);
+  border: 1px solid rgba($blue, 0.2);
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+
+  // Effet de lueur (gradient)
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(135deg, rgba($blue, 0.1) 0%, rgba($rose, 0.05) 100%);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  &:not(&--non-clickable):hover {
+    transform: translateY(-4px);
+    border-color: rgba($blue, 0.5);
+    box-shadow: 0 8px 24px rgba($blue, 0.15);
+    
+    .musicCard__icon-wrapper {
+      background: $blue;
+      color: $white;
+    }
+  }
+
+  &__link, &__content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    padding: 1.25rem;
+    gap: 1rem;
+    text-decoration: none;
+    color: $white;
+    width: 100%;
+  }
+
+  &__icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba($blue, 0.15);
+    color: $blue;
+    transition: all 0.3s ease;
+  }
+
+  &__info {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    backdrop-filter: blur(10px);
-    transition:
-      transform 0.3s ease,
-      border-color 0.3s ease,
-      background 0.3s ease;
-    position: relative;
-    overflow: hidden;
-
-    &:not(&--non-clickable):hover {
-      transform: translateY(-5px);
-      border-color: $blue;
-      background: rgba($gray, 0.4);
-    }
+    gap: 0.25rem;
+  }
 
   &__name {
-    color: $white;
+    font-size: 1.1rem;
+    font-weight: 600;
   }
 
-  & a {
-    color: $white;
-    text-decoration: none;
+  &__duration {
+    font-size: 0.85rem;
+    color: rgba($white, 0.6);
   }
-  & a:hover,
-  a:focus {
-    text-decoration: underline;
+
+  &__waveform {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    color: rgba($white, 0.2);
+    font-size: 0.5rem;
+    font-weight: 900;
+    letter-spacing: -1px;
+    opacity: 0.7;
+    
+    span {
+      display: inline-block;
+      transform: scaleY(1.5);
+      &:nth-child(2n) { transform: scaleY(2.5); color: rgba($blue, 0.3); }
+      &:nth-child(3n) { transform: scaleY(1); }
+      &:nth-child(5n) { transform: scaleY(3); color: rgba($rose, 0.3); }
+    }
   }
 }
