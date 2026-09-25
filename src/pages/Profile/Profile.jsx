@@ -5,6 +5,10 @@ import "./Profile.scss";
 import { useNavigate } from "react-router-dom";
 import { LogOut } from "lucide-react";
 
+import myFetch from "../../assets/utils/Fetch";
+import { useState } from "react";
+import { useEffect } from "react";
+
 function Profile() {
   const navigate = useNavigate();
   
@@ -22,6 +26,34 @@ function Profile() {
     },
     memberSince: "Janvier 2026"
   };
+  const [pseudo, setPseudo] = useState("");
+  const [subscription, setSubscription] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const res = await myFetch("profile", "GET");
+        const json = await res.json();
+
+        if (res.ok) {
+          setPseudo(json.username);
+          setSubscription(json.subscription); // { name, price }
+        } else {
+          console.error(json);
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, []);
+
+  if (loading) return <p>Chargement...</p>;
+
 
   const getProjectLimit = (plan) => {
     switch (plan) {
