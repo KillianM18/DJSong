@@ -17,7 +17,7 @@ function Inscription() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const res = await myFetch(
-      "homeConnexion",
+      "inscription",
       "POST",
       `username=${username}&email=${email}&password=${password}`,
     );
