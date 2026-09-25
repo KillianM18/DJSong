@@ -17,17 +17,13 @@ function Inscription() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const res = await myFetch(
-      "homeConnexion",
+      "inscription",
       "POST",
       `username=${username}&email=${email}&password=${password}`,
     );
-    const json = await res.json();
 
     if (res.ok) {
-      console.log(json);
       navigate("/playboard");
-    } else {
-      console.error(json);
     }
   };
 
